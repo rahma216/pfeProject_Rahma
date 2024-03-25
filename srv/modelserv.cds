@@ -6,6 +6,8 @@ service modelsService{
     
 
     entity Field as projection on models.Field;
+    action appendTextToFile(content: String) returns { success: Boolean };
+
 
 
 

@@ -18,12 +18,18 @@ xmlns:f="sap.f"
                     <content>
                      <form:SimpleForm editable="true" layout="ResponsiveGridLayout">
                                                 <form:content>
-                                                    
+                                                     <VBox >
                                                     <Label text="Enter your project Namespace" />
                                                     <Input id="namespace" width="50%" placeholder="Namespace"  />
-                                                     <Label text="Enter your Entity Name" />
+                                                    <Label text="Enter your Entity Name" />
+
                                                     <Input id="EntityNamee" width="50%" placeholder="EntityName"  />
-                                                    <Button id="confirmCreate1" text="Create" press=".onCreate" type="Accept" width="50%"/>
+                                                    <Button id="confirmCreate1" text="Create" press=".onCreate" type="Accept" width=""/>
+                                                    
+                                                    
+                                                    
+                                                    </VBox>
+                                                    
 
                                                    
                                                 </form:content>
@@ -83,7 +89,7 @@ xmlns:f="sap.f"
                             </headerToolbar>
                             	<infoToolbar>
 			<OverflowToolbar>
-				<Label text="Wide range of available products"/>
+				<Label text="Here are your created Entities"/>
 			</OverflowToolbar>
 		</infoToolbar>
                             <items>

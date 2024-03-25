@@ -38,7 +38,7 @@
                 <f:content>
                     <List
                         showSeparators="None"
-                        items="{path: 'maingit addModel>/Entity'}"
+                        items="{path: 'mainModel>/Entity'}"
                     >
                         <CustomListItem>
                             <HBox

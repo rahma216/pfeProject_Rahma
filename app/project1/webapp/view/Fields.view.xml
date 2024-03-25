@@ -1,10 +1,12 @@
-<mvc:View
+<mvc:View xmlns:vbm="sap.ui.vbm"
 	xmlns="sap.uxap"
 	xmlns:m="sap.m"
 	xmlns:f="sap.f"
 	xmlns:form="sap.ui.layout.form"
 	xmlns:mvc="sap.ui.core.mvc"
-    controllerName="app.project1.controller.Fields">
+    controllerName="app.project1.controller.Fields"
+		xmlns:core="sap.ui.core"
+>
 	<ObjectPageLayout
 		id="ObjectPageLayout"
 		showTitleInHeaderContent="true"
@@ -55,8 +57,8 @@
 					displayShape="Square"
 					class="sapUiTinyMarginEnd">
 				</f:Avatar>
-				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd" items="{mainModel>/Entity}">
-					<m:Label text="{mainModel>name}"/>
+				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd" items="">
+					<m:Label text="category"/>
 				</m:VBox>
 				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
 					<m:Label text="Subcategory"/>
@@ -67,7 +69,7 @@
 			</m:FlexBox>
 		</headerContent>
         <sections>
-			<ObjectPageSection title="General Information">
+			<ObjectPageSection title="Customize Entity's Properties">
 				<subSections>
 					<ObjectPageSubSection>
 						<blocks>
@@ -80,9 +82,43 @@
 								emptySpanL="0"
 								emptySpanM="0"
 								columnsL="1"
-								columnsM="1">
+								columnsM="1"
+																id="form"
+>
 								<form:content>
-									<m:Label text="Entity ID"/>
+
+                                <m:VBox id="parentvbox"
+								>
+								<m:HBox id="fields"  >
+								
+
+							
+
+
+									<m:Input id="field" value="" placeholder="EnterYourField" width="100%" >
+									
+									</m:Input>
+								    	<m:ComboBox class="sapUiSmallMarginBottom"
+					id="idComboBoxSuccess"
+					
+						items="{
+						path: 'actions>/Actions'
+						
+					}"
+						>
+					<core:ListItem key="{actions>key}" text="{actions>type}"/>
+				</m:ComboBox>
+				<m:Button icon="sap-icon://add" type="Default" width="30%" press=".onCloneInputField" ></m:Button>
+
+
+				</m:HBox>
+				
+
+				
+				</m:VBox>
+
+									
+									
 									<m:Label text="Entity Name"/>
 								</form:content>
 							</form:SimpleForm>

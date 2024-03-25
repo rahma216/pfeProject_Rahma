@@ -101,6 +101,7 @@
         "viewPath": "app.project1.view",
         "controlAggregation": "pages",
         "controlId": "app",
+       
         "clearControlAggregation": false
       },
       "routes": [
@@ -126,7 +127,7 @@
       "viewName": "app.project1.view.App",
       "type": "XML",
       "async": true,
-      "id": "App"
+      "id": "app"
     }
   }
 }
