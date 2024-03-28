@@ -15,6 +15,8 @@ sap.ui.define([
         return Controller.extend("app.project1.controller.List", {
             onInit: function () {
                 this._oTable = this.byId("table0");
+                var oDetailModel = new sap.ui.model.json.JSONModel();
+                this.getView().setModel(oDetailModel, "detailModel");
               
 
 
@@ -59,11 +61,37 @@ sap.ui.define([
             }
             
         },
-        onListItemPress: function () {
-			var oFCL = this.oView.getParent().getParent();
+        onListItemPress: function (oEvent) {
+           var oItem = oEvent.getSource();
+            //var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+           var oSelectedContext = oItem.getBindingContext("mainModel");
+            var oSelectedEntity = oSelectedContext.getProperty("name");
+            var oSelectedEntityid = oSelectedContext.getProperty("ID"); 
+            // Passer les données de l'entité sélectionnée à la deuxième vue et afficher cette vue
+           // var oDetailView = this.getView().getParent().getParent().getMidColumnPages()[0];
+           /*  oDetailView.setModel(new sap.ui.model.json.JSONModel(oSelectedEntity), "selectedEntityModel");
+            this.getView().getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsMidExpanded); */
+            var oModel = this.getOwnerComponent().getModel("detailModel");
+            oModel.setProperty("/name", oSelectedEntity);
+            oModel.setProperty("/id", oSelectedEntityid);
 
-			oFCL.setLayout(fioriLibrary.LayoutType.TwoColumnsMidExpanded);
-		},
+
+            
+
+
+            this.getOwnerComponent().getRouter().navTo("Details", {
+				index: 251
+			});
+            var Model = this.getOwnerComponent().getModel("localModel");
+            Model.setProperty("/layout", "TwoColumnsMidExpanded");
+
+
+
+
+
+
+        },
+        
         filterEntityById: function(id) {
             let oModel = this.getView().getModel();
             let aFilter = new sap.ui.model.Filter("ID", sap.ui.model.FilterOperator.EQ, id);

@@ -19,44 +19,43 @@ sap.ui.define(
         
         var oModel = new sap.ui.model.json.JSONModel(actions);
         this.getView().setModel(oModel, "actions");
+        var oModel = this.getView().getModel("selectedEntityModel");
+        this.getView().setModel(oModel, "selectedEntityModel");
       
       },
     
       onEditToggleButtonPress: function() {
 
-          console.log("en mode edit ")
     var oObjectPage = this.getView().byId("ObjectPageLayout"),
       bCurrentShowFooterState = oObjectPage.getShowFooter();
 
     oObjectPage.setShowFooter(!bCurrentShowFooterState);
   },
       onSupplierPress: function () {
-          console.log("chay mafama")
     var oFCL = this.oView.getParent().getParent();
 
     oFCL.setLayout(fioriLibrary.LayoutType.ThreeColumnsMidExpanded);
   },
   onCloneInputField: function (event) {
-    // 1. Get the button that triggered the event and its parent container
     var button = event.getSource();
     var parentContainer = button.getParent();
     console.log(parentContainer.getMetadata())
 
-    // 2. Clone the input field
     var originalInputField = this.getView().byId("fields"); // Assuming the input field has an ID "field"
     var clonedInputField = originalInputField.clone();
     var parentVBox = this.getView().byId("parentvbox")
 
 
 
-    // 3. Optionally reset the value of the cloned input field
-    // clonedInputField.setValue("");
-
-    // 4. Add the cloned input field to the parent container
     parentVBox.addItem(clonedInputField);
 
 
 
+},
+handleClose: function () {
+  var Model = this.getOwnerComponent().getModel("localModel");
+  Model.setProperty("/layout", "OneColumn");
+this.oRouter.navTo("RouteList");
 },
 
 

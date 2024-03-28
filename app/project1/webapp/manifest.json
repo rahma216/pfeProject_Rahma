@@ -23,6 +23,15 @@
           "annotations": [],
           "odataVersion": "4.0"
         }
+      },
+      "localData": {
+        "uri": "localSource/LocalModel.json",
+        "type": "JSON"
+      },
+      "detailsData":
+      {
+        "uri": "localSource/LocalModel.json",
+        "type": "JSON"
       }
     }
   },
@@ -43,7 +52,7 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": false ,
+    "flexEnabled": false,
     "dependencies": {
       "minUI5Version": "1.121.2",
       "libs": {
@@ -56,8 +65,6 @@
         "sap.ui.table": {},
         "sap.ushell": {},
         "sap.uxap": {}
-
-
       }
     },
     "contentDensities": {
@@ -76,15 +83,23 @@
         "dataSource": "mainService",
         "preload": true,
         "settings": {
-            "synchronizationMode": "None",
-            "operationMode": "Server",
-            "autoExpandSelect": true,
-            "earlyRequests": true,
-            "groupId": "$auto"
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true,
+          "groupId": "$auto"
         }
-    }
-
-     
+      },
+      "localModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {},
+        "dataSource": "localData"
+      },
+      "detailModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {},
+        "dataSource": "detailsData"
+      }
     },
     "resources": {
       "css": [
@@ -95,14 +110,22 @@
     },
     "routing": {
       "config": {
+        "sample": {
+          "files": [
+            "Association.view.xml",
+            "Association.controller.js",
+            "manifest.json",
+            "/home/user/projects/App_Generator/app/project1/webapp/RevealGrid/RevealGrid.js"
+          ]
+        },
         "routerClass": "sap.m.routing.Router",
         "viewType": "XML",
         "async": true,
         "viewPath": "app.project1.view",
         "controlAggregation": "pages",
         "controlId": "app",
-       
         "clearControlAggregation": false
+       
       },
       "routes": [
         {
@@ -110,6 +133,13 @@
           "pattern": ":?query:",
           "target": [
             "TargetList"
+          ]
+        },
+        {
+          "name": "Details",
+          "pattern": "details/{index}",
+          "target": [
+            "Details"
           ]
         }
       ],
@@ -120,6 +150,10 @@
           "clearControlAggregation": false,
           "viewId": "List",
           "viewName": "List"
+        },
+        "Details": {
+          "viewType": "XML",
+          "viewName": "Fields"
         }
       }
     },

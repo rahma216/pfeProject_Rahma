@@ -18,24 +18,26 @@ type FieldType : String enum {
 
 
 entity Field : cuid, managed {
-   key ID       : Integer;
-    value : String;
-    fld : Association to many Entity;
-    type: FieldType;
+    key ID       : String;
+    value       : String;
+    type        : String;
+    fld         : Association to Entity; // Many-to-one association
+    iskey       : Boolean;
+
+
 }
 
 
 entity Entity : cuid, managed {
-    key ID       : Integer;
-    name : String;
-    fields : Association to many Field
-                     on fields.fld = $self;
+    key ID       : String;
+    name        : String;
+    fields      : Association to many Field on fields.fld = $self;
 
 
 }
  
 /*entity Association : cuid, managed{
-  key ID       : Integer;
+  key ID : Integer;
   name: String(255);
 
 

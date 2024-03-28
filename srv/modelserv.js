@@ -19,7 +19,7 @@ module.exports = cds.service.impl((srv) => {
             return { success: false };
         }
     });
-    srv.after('CREATE', 'Entity', async (entityData, req) => {
+   /*  srv.after('CREATE', 'Entity', async (entityData, req) => {
       try {
           // Récupérez les données de l'entité créée
           const formattedData = JSON.stringify(entityData);
@@ -35,9 +35,9 @@ module.exports = cds.service.impl((srv) => {
           console.error('Erreur lors de la création des champs associés:', error);
           throw error;
       }
-  });
+  }); */
 });
-async function createAssociatedFields(entityName, requestData) {
+/* async function createAssociatedFields(entityName, requestData) {
   const createdFields = [];
   try {
       // Assurez-vous que requestData est défini et qu'il contient les propriétés attendues
@@ -69,7 +69,7 @@ async function createAssociatedFields(entityName, requestData) {
       console.error('Erreur lors de la création des champs associés:', error);
       throw error;
   }
-}
+}  */
 
 
 

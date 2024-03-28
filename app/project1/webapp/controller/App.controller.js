@@ -5,7 +5,7 @@ sap.ui.define(
   function(BaseController) {
     "use strict";
 
-    return BaseController.extend("app.project1.controller.Association", {
+    return BaseController.extend("app.project1.controller.App", {
       onInit: function() {
       }
     });

@@ -1,162 +1,223 @@
-<mvc:View xmlns:vbm="sap.ui.vbm"
-	xmlns="sap.uxap"
-	xmlns:m="sap.m"
-	xmlns:f="sap.f"
-	xmlns:form="sap.ui.layout.form"
-	xmlns:mvc="sap.ui.core.mvc"
+<mvc:View
+    xmlns:vbm="sap.ui.vbm"
+    xmlns="sap.uxap"
+    xmlns:m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc"
     controllerName="app.project1.controller.Fields"
-		xmlns:core="sap.ui.core"
+    xmlns:core="sap.ui.core"
 >
-	<ObjectPageLayout
-		id="ObjectPageLayout"
-		showTitleInHeaderContent="true"
-		alwaysShowContentHeader="false"
-		preserveHeaderStateOnScroll="false"
-		headerContentPinnable="true"
-		isChildPage="true"
-		upperCaseAnchorBar="false">
-		<headerTitle>
-			<ObjectPageDynamicHeaderTitle>
-            <expandedHeading>
-					<m:Title text="" wrapping="true" class="sapUiSmallMarginEnd"/>
-				</expandedHeading>
+    <ObjectPageLayout
+        id="ObjectPageLayout"
+        showTitleInHeaderContent="true"
+        alwaysShowContentHeader="false"
+        preserveHeaderStateOnScroll="false"
+        headerContentPinnable="true"
+        isChildPage="true"
+        upperCaseAnchorBar="false"
+    >
+        <headerTitle>
+            <ObjectPageDynamicHeaderTitle>
+                <expandedHeading />
+                <navigationActions>
+                    <m:OverflowToolbarButton
+                        type="Transparent"
+                        icon="sap-icon://decline"
+                        press="handleClose"
+                        tooltip="Close middle column"
+                        visible="true"
+                    />
+                </navigationActions>
 
-				<snappedHeading>
-					<m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Center">
-						<m:FlexBox wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
-							<f:Avatar
-								src=""
-								displaySize="S"
-								displayShape="Square"
-								class="sapUiTinyMarginEnd"/>
-							<m:Title text="" wrapping="true"/>
-						</m:FlexBox>
-					</m:FlexBox>
-				</snappedHeading>
-				<actions>
-					<m:ToggleButton
-						text="Edit"
-						type="Emphasized" press=".onEditToggleButtonPress"/>
-					<m:Button
-						text="Delete"
-						type="Transparent"/>
-					<m:Button
-						text="Copy"
-						type="Transparent"/>
-					<m:Button
-						icon="sap-icon://action"
-						type="Transparent"/>
-				</actions>
-			</ObjectPageDynamicHeaderTitle>
-		</headerTitle>
+                <actions>
+                    <m:ToggleButton
+                        text="Edit"
+                        type="Emphasized"
+                        press=".onEditToggleButtonPress"
+                    />
+                    <m:Button
+                        text="Delete"
+                        type="Transparent"
+                    />
+                    <m:Button
+                        text="Copy"
+                        type="Transparent"
+                    />
+                    <m:Button
+                        icon="sap-icon://action"
+                        type="Transparent"
+                    />
+                </actions>
+            </ObjectPageDynamicHeaderTitle>
+        </headerTitle>
 
-		<headerContent>
-			<m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch">
-				<f:Avatar
-					displaySize="L"
-					displayShape="Square"
-					class="sapUiTinyMarginEnd">
-				</f:Avatar>
-				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd" items="">
-					<m:Label text="category"/>
-				</m:VBox>
-				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
-					<m:Label text="Subcategory"/>
-				</m:VBox>
-				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
-					<m:Label text="Price"/>
-				</m:VBox>
-			</m:FlexBox>
-		</headerContent>
+        <headerContent>
+            <m:HBox
+                wrap="Wrap"
+                fitContainer="false"
+                alignItems="Stretch"
+            >
+                <f:Avatar
+                    displaySize="L"
+                    displayShape="Circle"
+                    class="sapUiTinyMarginEnd"
+                />
+
+                <m:VBox
+                    justifyContent="Center"
+                    class="sapUiSmallMarginEnd"
+                    items=""
+                >
+                    <form:SimpleForm
+                        maxContainerCols="2"
+                        editable="false"
+                        layout="ResponsiveGridLayout"
+                        labelSpanL="12"
+                        labelSpanM="12"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        columnsL="1"
+                        columnsM="1"
+                    >
+                        <form:content>
+                            <m:Title
+                                text="{detailModel>/name}"
+                                wrapping="true"
+                            />
+                            <m:Label text="Entity ID" />
+                            <m:Text text="{detailModel>/id}" />
+                            <m:Label text="Entity Name" />
+                            <m:Text text="{detailModel>/name}" />
+                        </form:content>
+                    </form:SimpleForm>
+                </m:VBox>
+            </m:HBox>
+        </headerContent>
         <sections>
-			<ObjectPageSection title="Customize Entity's Properties">
-				<subSections>
-					<ObjectPageSubSection>
-						<blocks>
-							<form:SimpleForm
-								maxContainerCols="2"
-								editable="false"
-								layout="ResponsiveGridLayout"
-								labelSpanL="12"
-								labelSpanM="12"
-								emptySpanL="0"
-								emptySpanM="0"
-								columnsL="1"
-								columnsM="1"
-																id="form"
->
-								<form:content>
-
-                                <m:VBox id="parentvbox"
-								>
-								<m:HBox id="fields"  >
-								
-
-							
-
-
-									<m:Input id="field" value="" placeholder="EnterYourField" width="100%" >
-									
-									</m:Input>
-								    	<m:ComboBox class="sapUiSmallMarginBottom"
-					id="idComboBoxSuccess"
-					
-						items="{
+            <ObjectPageSection>
+                <subSections>
+                    <ObjectPageSubSection>
+                        <blocks>
+                            <m:VBox>
+                                <m:Title
+                                    text="Customize Your Entities Properties"
+                                />
+                                <form:SimpleForm
+                                    maxContainerCols="2"
+                                    editable="false"
+                                    layout="ResponsiveGridLayout"
+                                    labelSpanL="12"
+                                    labelSpanM="12"
+                                    emptySpanL="0"
+                                    emptySpanM="0"
+                                    columnsL="1"
+                                    columnsM="1"
+                                    id="form"
+                                >
+                                    <form:content>
+                                        <m:VBox
+                                            id="parentvbox"
+                                            justifyContent="Center"
+                                        >
+                                            <m:HBox id="fields">
+                                                <m:Input
+                                                    id="field"
+                                                    value=""
+                                                    placeholder="EnterYourField"
+                                                    width="100%"
+                                                />
+                                                <m:ComboBox
+                                                    placeholder="Type"
+                                                    class="sapUiSmallMarginBottom"
+                                                    id="idComboBoxSuccess"
+                                                    items="{
 						path: 'actions>/Actions'
 						
 					}"
-						>
-					<core:ListItem key="{actions>key}" text="{actions>type}"/>
-				</m:ComboBox>
-				<m:Button icon="sap-icon://add" type="Default" width="30%" press=".onCloneInputField" ></m:Button>
+                                                >
+                                                    <core:ListItem
+                                                        key="{actions>key}"
+                                                        text="{actions>type}"
+                                                    />
+                                                </m:ComboBox>
+                                                 <m:ComboBox
+                                                    placeholder="Annotations"
+                                                    class="sapUiSmallMarginBottom"
+                                                    id=""
+                                                    items="{
+						path: 'actions>/Actions'
+						
+					}"
+                                                >
+                                                    <core:ListItem
+                                                        key="{actions>key}"
+                                                        text="{actions>type}"
+                                                    />
+                                                </m:ComboBox>
+                                                <m:Button
+                                                    icon="sap-icon://add"
+                                                    type="Default"
+                                                    width="30%"
+                                                    press=".onCloneInputField"
+                                                />
+                                            </m:HBox>
+                                        </m:VBox>
 
-
-				</m:HBox>
-				
-
-				
-				</m:VBox>
-
-									
-									
-									<m:Label text="Entity Name"/>
-								</form:content>
-							</form:SimpleForm>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
-
-			<ObjectPageSection title="Suppliers">
-				<subSections>
-					<ObjectPageSubSection>
-						<blocks>
-							<m:Table
-								id="suppliersTable"
-								items="{mainModel>/Entity}">
-								<m:columns>
-									<m:Column/>
-								</m:columns>
-								<m:items>
-									<m:ColumnListItem type="Navigation" press=".onSupplierPress">
-										<m:cells>
-											<m:ObjectIdentifier text="{= ${mainModel>name} === 'Orders' ? ${mainModel>name} : ''}"/>
-										</m:cells>
-									</m:ColumnListItem>
-								</m:items>
-							</m:Table>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
-		</sections>
+                                        <m:Label text="Entity Name" />
+                                    </form:content>
+                                </form:SimpleForm>
+                              
+                            </m:VBox>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+                 <subSections>
+                    <ObjectPageSubSection>
+                        <blocks>
+                            <m:VBox>
+                                <m:Title
+                                    text="Customize Your Entities Properties"
+                                />
+                               
+                                <m:Table
+                                    id="suppliersTable"
+                                    items="{mainModel>/Entity}"
+                                >
+                                    <m:columns>
+                                        <m:Column />
+                                    </m:columns>
+                                    <m:items>
+                                        <m:ColumnListItem
+                                            type="Navigation"
+                                            press=".onSupplierPress"
+                                        >
+                                            <m:cells>
+                                                <m:ObjectIdentifier
+                                                    text="{= ${mainModel>name} === 'Orders' ? ${mainModel>name} : ''}"
+                                                />
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+                            </m:VBox>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+            </ObjectPageSection>
+        </sections>
         <footer>
-			<m:OverflowToolbar>
-				<m:ToolbarSpacer/>
-				<m:Button type="Accept" text="Save"/>
-				<m:Button type="Reject" text="Cancel"/>
-			</m:OverflowToolbar>
-		</footer>
-
-	</ObjectPageLayout>
+            <m:OverflowToolbar>
+                <m:ToolbarSpacer />
+                <m:Button
+                    type="Accept"
+                    text="Save"
+                />
+                <m:Button
+                    type="Reject"
+                    text="Cancel"
+                />
+            </m:OverflowToolbar>
+        </footer>
+    </ObjectPageLayout>
 </mvc:View>
