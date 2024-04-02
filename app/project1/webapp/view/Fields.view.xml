@@ -82,13 +82,16 @@
                     >
                         <form:content>
                             <m:Title
-                                text="{detailModel>/name}"
+                                text="{mainModel>name}"
                                 wrapping="true"
                             />
                             <m:Label text="Entity ID" />
-                            <m:Text text="{detailModel>/id}" />
+                            <m:Text
+                                id="fldd"
+                                text="{mainModel>ID}"
+                            />
                             <m:Label text="Entity Name" />
-                            <m:Text text="{detailModel>/name}" />
+                            <m:Text text="{mainModel>name}" />
                         </form:content>
                     </form:SimpleForm>
                 </m:VBox>
@@ -122,6 +125,12 @@
                                         >
                                             <m:HBox id="fields">
                                                 <m:Input
+                                                    id="fieldid"
+                                                    value=""
+                                                    placeholder="ID"
+                                                    width="100%"
+                                                />
+                                                <m:Input
                                                     id="field"
                                                     value=""
                                                     placeholder="EnterYourField"
@@ -137,11 +146,11 @@
 					}"
                                                 >
                                                     <core:ListItem
-                                                        key="{actions>key}"
+                                                        key="{actions>type}"
                                                         text="{actions>type}"
                                                     />
                                                 </m:ComboBox>
-                                                 <m:ComboBox
+                                                <m:ComboBox
                                                     placeholder="Annotations"
                                                     class="sapUiSmallMarginBottom"
                                                     id=""
@@ -155,11 +164,12 @@
                                                         text="{actions>type}"
                                                     />
                                                 </m:ComboBox>
+
                                                 <m:Button
-                                                    icon="sap-icon://add"
-                                                    type="Default"
-                                                    width="30%"
-                                                    press=".onCloneInputField"
+                                                    id="confirmCreate"
+                                                    text="Create"
+                                                    press=".onCreate2"
+                                                    type="Emphasized"
                                                 />
                                             </m:HBox>
                                         </m:VBox>
@@ -167,34 +177,163 @@
                                         <m:Label text="Entity Name" />
                                     </form:content>
                                 </form:SimpleForm>
-                              
                             </m:VBox>
                         </blocks>
                     </ObjectPageSubSection>
                 </subSections>
-                 <subSections>
+                <subSections>
                     <ObjectPageSubSection>
                         <blocks>
                             <m:VBox>
-                                <m:Title
-                                    text="Customize Your Entities Properties"
+                                <m:Button
+                                    id="invisibleButton"
+                                    text=""
+                                    press="onInvisibleButtonPress"
+                                    visible="false"
                                 />
-                               
-                                <m:Table
-                                    id="suppliersTable"
-                                    items="{mainModel>/Entity}"
+
+                              <!--   <m:Title text="{detailModel>/name} Fields" /> -->
+                             <!--    <m:Table
+                                    items="{path: 'detailModel>/fields'     
+                                      }"
+                                    id="table1"
+                                    mode="SingleSelectLeft"
+                                    selectionChange="onSelect"
                                 >
-                                    <m:columns>
-                                        <m:Column />
-                                    </m:columns>
+                                    <m:headerToolbar>
+                                        <m:OverflowToolbar>
+                                            <m:content>
+                                                <m:ToolbarSpacer />
+                                                <m:Button
+                                                    id="createButton2"
+                                                    icon="sap-icon://add"
+                                                    tooltip="Create"
+                                                    visible="true"
+                                                    press="onOpenAddDialog2"
+                                                >
+                                                    <m:layoutData>
+                                                        <m:OverflowToolbarLayoutData
+                                                            priority="NeverOverflow"
+                                                        />
+                                                    </m:layoutData>
+                                                </m:Button>
+                                            </m:content>
+                                            <m:dependents>
+                                                <m:Dialog
+                                                    id="OpenDialog2"
+                                                    title="Create Sales Order"
+                                                >
+                                                    <m:buttons>
+                                                        <m:Button
+                                                            id="confirmCreate2"
+                                                            text="Create"
+                                                            press=".onCreate2"
+                                                            type="Emphasized"
+                                                        />
+                                                        <m:Button
+                                                            id="cancelCreate2"
+                                                            text="Cancel"
+                                                            press="onCancelDialog"
+                                                            type="Transparent"
+                                                        />
+                                                    </m:buttons>
+                                                    <m:VBox>
+                                                        <m:Label
+                                                            text="ID"
+                                                            required="true"
+                                                        />
+                                                        <m:Input id="idf" />
+                                                        <m:Label text="Value" />
+                                                        <m:Input id="value" />
+                                                        <m:Label text="Type" />
+                                                        <m:Input id="type" />
+                                                        <m:Label text="fld" />
+                                                        <m:Input id="fld" />
+                                                    </m:VBox>
+                                                </m:Dialog>
+                                            </m:dependents>
+                                        </m:OverflowToolbar>
+                                    </m:headerToolbar>
                                     <m:items>
                                         <m:ColumnListItem
-                                            type="Navigation"
+                                            type="Active"
+                                            id="item1"
                                             press=".onSupplierPress"
                                         >
                                             <m:cells>
-                                                <m:ObjectIdentifier
-                                                    text="{= ${mainModel>name} === 'Orders' ? ${mainModel>name} : ''}"
+                                                <m:Text
+                                                    id="id3"
+                                                    text="{detailModel>ID}"
+                                                />
+                                                <m:Text
+                                                    id="id4"
+                                                    text="{detailModel>value}"
+                                                />
+                                                <m:Text
+                                                    id="id5"
+                                                    text="{detailModel>type}"
+                                                />
+                                                <m:Text
+                                                    id="id6"
+                                                    text="{detailModel>fld_ID}"
+                                                />
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                    <m:columns>
+                                        <m:Column>
+                                            <m:header>
+                                                <m:Label text="ID" />
+                                            </m:header>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:header>
+                                                <m:Label text="value" />
+                                            </m:header>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:header>
+                                                <m:Label text="type" />
+                                            </m:header>
+                                        </m:Column>
+                                    </m:columns>
+                                </m:Table> -->
+                                <m:Button
+                                    text="Show Table"
+                                    press="onShowTablePress"
+                                />
+
+                                <m:Table
+                                    id="dynamicTable"
+                                    items="{/entityData}"
+                                    visible="{viewModel>/showTable}"
+                                >
+                                    <m:columns>
+                                        <m:Column>
+                                            <m:header>
+                                                <m:Text text="ID" />
+                                            </m:header>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:header>
+                                                <m:Text text="Name" />
+                                            </m:header>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:header>
+                                                <m:Text text="Fields" />
+                                            </m:header>
+                                        </m:Column>
+                                    </m:columns>
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text
+                                                    text="{= ${ID} === ${detailModel>ID} ? ${ID} : ${ID}}"
+                                                />
+                                                <m:Text text="{name}" />
+                                                <m:Text
+                                                    text="{ path: 'fields', formatter: '.formatFieldsValue' }"
                                                 />
                                             </m:cells>
                                         </m:ColumnListItem>

@@ -1,12 +1,8 @@
 namespace models;
 
 
-using {
-        managed,
-        cuid,
+using { cuid, managed} from '@sap/cds/common';
 
-
-} from '@sap/cds/common';
 
 
 type FieldType : String enum {

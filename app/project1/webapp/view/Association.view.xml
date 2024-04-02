@@ -20,14 +20,18 @@
 				class="sapUiSmallMargin"
 				width="400px"
 				items="{path: '/' }">
-					<StandardListItem title="{value}" />
+					<StandardListItem title="{name}" />
 			</List>
 			<f:GridContainer
 				id="grid1"
 				class="sapUiSmallMargin"
 				width="100%"
 				snapToRow="true"
-				items="{ path: '/'  }">
+    items="{ path: '/'}">
+    <!-- Your content inside the grid container -->
+    <!-- For example: -->
+  
+			
 				<f:layout>
 					<f:GridContainerSettings rowSize="84px" columnSize="84px" gap="8px" />
 				</f:layout>
@@ -36,11 +40,13 @@
 				</f:layoutXS>
 
 				<f:Card>
+					
 					<f:layoutData>
-						<f:GridContainerItemLayoutData minRows="2" columns="3" />
+					
+						<f:GridContainerItemLayoutData minRows="1" columns="3" />
 					</f:layoutData>
 					<f:header>
-						<card:Header title="{layout}" />
+						<card:Header title="{name}" />
 					</f:header>
 				</f:Card>
 			</f:GridContainer>
