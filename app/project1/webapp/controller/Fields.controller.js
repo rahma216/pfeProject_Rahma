@@ -1,10 +1,12 @@
 sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
-        "sap/f/library"
+        "sap/f/library",
+        "sap/m/MessageToast",
+
 
     ],
-    function (BaseController, fioriLibrary) {
+    function (BaseController, fioriLibrary,MessageToast) {
         "use strict";
 
         return BaseController.extend("app.project1.controller.Fields", {
@@ -17,6 +19,18 @@ sap.ui.define(
                         { key: 3, type: "float" }
                     ]
                 };
+                var annotations = {
+                    "Annotations": [
+                        { key: 0, name: "@readonly" },
+                        { key: 1, name: "@mandatory" },
+                        { key: 2, name: "@assert.unique" },
+                        { key: 3, name: "@assert.integrity" },
+                        { key: 3, name: "@assert.integrity" },
+                        { key: 3, name: "@assert.notNull" }
+
+
+                    ]
+                };
                 var oViewModel = new sap.ui.model.json.JSONModel({
                     showTable: false // Initially set to false to hide the table
                 });
@@ -24,11 +38,15 @@ sap.ui.define(
               
                 var oModel = new sap.ui.model.json.JSONModel(actions);
                 this.getView().setModel(oModel, "actions");
+                var oModel = new sap.ui.model.json.JSONModel(annotations);
+                this.getView().setModel(oModel, "annotations");
+
                 var oModel = this.getView().getModel("selectedEntityModel");
                 this.getView().setModel(oModel, "selectedEntityModel");
 
                 this.oRouter = this.getOwnerComponent().getRouter();
                 this.oRouter.getRoute("Details").attachPatternMatched(this._onFieldsMatched, this);
+
 
             },
             _onFieldsMatched: function (oEvent) {
@@ -67,6 +85,9 @@ sap.ui.define(
 
 
             },
+            onCancelDialog: function (oEvent) {
+                oEvent.getSource().getParent().close();
+            },
 
 
 
@@ -82,6 +103,13 @@ sap.ui.define(
                  var bShowTable = oViewModel.getProperty("/showTable");
                  oViewModel.setProperty("/showTable", !bShowTable);
                 */
+                 console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbb",this.getView().byId("annotations").mProperties.
+                 selectedKeys)
+                 var array= this.getView().byId("annotations").mProperties.selectedKeys ; 
+                 var annotations = array.join(" ");
+                 console.log("a7la annotation",annotations)
+
+
 
 
                 if (oModel) {
@@ -114,7 +142,10 @@ sap.ui.define(
                                         "ID": this.byId("fieldid").getValue(),
                                         "value": this.byId("field").getValue(),
                                         "type": this.byId("idComboBoxSuccess").getValue(),
-                                        "fld": oEntity
+                                        "fld": oEntity,
+                                        "annotations":annotations
+
+
                                     });
 
 
@@ -243,6 +274,60 @@ sap.ui.define(
                     console.error("Main model not found");
                 }
             },
+            onUpdate: function () {
+                var oSelected = this.getView().byId("table1").getSelectedItem();
+                if (oSelected) {
+                    var oContext = oSelected.getBindingContext("mainModel");
+                    if (oContext) {
+                        var skey = this.getView().byId("iskey").getValue();
+                        var svalue = this.getView().byId("value").getValue();
+                        var stype = this.getView().byId("idComboBoxupdate").getValue();
+                        var sannotations=this.getView().byId("idComboBoxupdate").mProperties.selectedKeys;
+                        var bIsKey = Boolean(skey);
+
+
+
+
+                        oContext.setProperty("iskey", bIsKey);
+                        oContext.setProperty("value", svalue);
+                        oContext.setProperty("type", stype);
+                        //oContext.setProperty("annotations", sannotations);
+
+
+
+
+                        var oModel = this.getView().getModel("mainModel");
+                        oModel.submitBatch("yourGroupId").then(function () {
+                            // Success callback
+                            MessageToast.show("Update successful");
+                        }).catch(function (oError) {
+                            // Error callback
+                            MessageToast.show("Update failed: " + oError.message);
+                        });
+                    } else {
+                        MessageToast.show("Invalid Field");
+                    }
+                } else {
+                    MessageToast.show("Please select a row to update");
+                }
+            },
+            onDelete: function () {
+
+                var oSelected = this.byId("table1").getSelectedItem();
+                if (oSelected) {
+                    var oSalesOrder = oSelected.getBindingContext("mainModel").getObject();
+
+                    oSelected.getBindingContext("mainModel").delete("$auto").then(function () {
+                        MessageToast.show(oSalesOrder + " SuccessFully Deleted");
+                    }.bind(this), function (oError) {
+                        MessageToast.show("Deletion Error: ", oError);
+                    });
+                } else {
+                    MessageToast.show("Please Select a Row to Delete");
+                }
+
+            },
+           
 
             onOpenAddDialog2: function () {
                 this.getView().byId("OpenDialog2").open();
@@ -263,6 +348,9 @@ sap.ui.define(
             },
         });
     },
+    
+    
+
 
 
 

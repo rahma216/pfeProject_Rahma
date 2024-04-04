@@ -3,10 +3,14 @@ service modelsService{
 
 
   entity Entity as projection on models.Entity;
+
     
 
     entity Field as projection on models.Field;
+     entity Association as projection on models.Association;
+
     action appendTextToFile(content: String) returns { success: Boolean };
+
 
 
 

@@ -1,4 +1,4 @@
-<mvc:View
+<mvc:View xmlns:core="sap.ui.core"
     controllerName="app.project1.controller.List"
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
@@ -9,15 +9,11 @@
     <f:DynamicPage
         id="dynamicPageId"
         toggleHeaderOnTitleClick="false"
+        headerExpanded="true"
+        fitContent="true"
     >
         <!-- DynamicPage Title -->
-        <f:title>
-            <f:DynamicPageTitle>
-                <f:heading>
-                    <Title text="{mainModel>/Entity}" />
-                </f:heading>
-            </f:DynamicPageTitle>
-        </f:title>
+      
         <f:content>
             <Page
                 id="page"
@@ -89,7 +85,7 @@
                                     />
                                     <Button
                                         id="createButton"
-                                        icon="sap-icon://add"
+                                        icon="sap-icon://edit"
                                         tooltip="Create"
                                         visible="true"
                                         press="onOpenAddDialog"
@@ -139,17 +135,17 @@
                                 <dependents>
                                     <Dialog
                                         id="OpenDialog"
-                                        title="Create Entity"
+                                        title="Update Entity"
                                     >
                                         <buttons>
                                             <Button
-                                                id="confirmCreate"
-                                                text="Create"
-                                                press=".onCreate"
+                                                id="confirmUpdate"
+                                                text="Update"
+                                                press=".onUpdate"
                                                 type="Emphasized"
                                             />
                                             <Button
-                                                id="cancelCreate"
+                                                id="cancelUpdate"
                                                 text="Cancel"
                                                 press="onCancelDialog"
                                                 type="Transparent"
@@ -165,6 +161,7 @@
                                             </form:content>
                                         </form:SimpleForm>
                                     </Dialog>
+                                    
                                 </dependents>
                             </OverflowToolbar>
                         </headerToolbar>
@@ -188,6 +185,7 @@
                                         id="id2"
                                         text="{mainModel>name}"
                                     />
+        <core:Icon src="sap-icon://message-success" color="green"   />
                                    
                                 </cells>
                             </ColumnListItem>
@@ -201,6 +199,11 @@
                             <Column>
                                 <header>
                                     <Label text="name" />
+                                </header>
+                            </Column>
+                            <Column>
+                                <header>
+                                    <Label text="Status" />
                                 </header>
                             </Column>
                         </columns>

@@ -18,6 +18,7 @@ entity Field : cuid, managed {
     value       : String;
     type        : String;
     fld         : Association to Entity; // Many-to-one association
+    annotations : String ;
     iskey       : Boolean;
 
 
@@ -31,15 +32,13 @@ entity Entity : cuid, managed {
 
 
 }
+entity Association :cuid, managed{
+  entitySource : Association to Entity;
+  entityTarget  : Association to Entity;
+  type : String;
+
+
+}
+
+
  
-/*entity Association : cuid, managed{
-  key ID : Integer;
-  name: String(255);
-
-
-  sourceEntity: Association to Entity;
-  targetEntity: Association to Entity;
-
-
-  multiplicity: Int16;
-}*/
