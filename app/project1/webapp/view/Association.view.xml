@@ -148,6 +148,12 @@
 			press=".OnCdsgen"
 			type="Default"
 			 />
+			  <Button
+			id="append"
+			text="append to file"
+			press=".onAppendTextToFilePress"
+			type="Default"
+			 />
 
 		
 

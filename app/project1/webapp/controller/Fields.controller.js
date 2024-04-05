@@ -108,6 +108,18 @@ sap.ui.define(
                  var array= this.getView().byId("annotations").mProperties.selectedKeys ; 
                  var annotations = array.join(" ");
                  console.log("a7la annotation",annotations)
+                 var key = this.byId("key").getValue();
+                 var skey;
+                 
+                 // Convert string to boolean
+                 if (key.toLowerCase() === "true") {
+                     skey = true;
+                 } else if (key.toLowerCase() === "false") {
+                     skey = false;
+                 } else {
+                     // Handle invalid input if necessary
+                     console.error("Invalid input. Cannot convert to boolean.");
+                 }
 
 
 
@@ -143,7 +155,8 @@ sap.ui.define(
                                         "value": this.byId("field").getValue(),
                                         "type": this.byId("idComboBoxSuccess").getValue(),
                                         "fld": oEntity,
-                                        "annotations":annotations
+                                        "annotations":annotations,
+                                        "iskey":skey
 
 
                                     });
@@ -283,7 +296,17 @@ sap.ui.define(
                         var svalue = this.getView().byId("value").getValue();
                         var stype = this.getView().byId("idComboBoxupdate").getValue();
                         var sannotations=this.getView().byId("idComboBoxupdate").mProperties.selectedKeys;
-                        var bIsKey = Boolean(skey);
+                        var bIsKey;
+                        
+                        // Convert string to boolean
+                        if (skey.toLowerCase() === "true") {
+                            bIsKey = true;
+                        } else if (skey.toLowerCase() === "false") {
+                            bIsKey = false;
+                        } else {
+                            // Handle invalid input if necessary
+                            console.error("Invalid input. Cannot convert to boolean.");
+                        }
 
 
 
@@ -346,6 +369,7 @@ sap.ui.define(
                 Model.setProperty("/layout", "OneColumn");
                 this.getOwnerComponent().getRouter().navTo("Listview");
             },
+          
         });
     },
     

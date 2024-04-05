@@ -86,6 +86,11 @@
                                             <m:HBox id="fields">
                                                 <m:Input id="fieldid" value=""
                                                     placeholder="ID" width="100%" />
+                                                    <m:ComboBox id="key" placeholder="PrimaryKey" class="sapUiSmallMarginBottom">
+                                                    <core:Item key="true" text="true"/>
+                                                        <core:Item key="false" text="false"/>
+                                                    </m:ComboBox>
+
                                                 <m:Input id="field" value=""
                                                     placeholder="EnterYourField"
                                                     width="100%" />
@@ -220,7 +225,9 @@
                                                 <m:Text id="id5"
                                                     text="{mainModel>type}" />
                                                 <m:Text id="id6"
-                                                    text="{mainModel>fld_ID}" />
+                                                    text="{mainModel>annotations}" />
+                                                     <m:Text id="primkey"
+                                                    text="{mainModel>iskey}" />
                                             </m:cells>
                                         </m:ColumnListItem>
                                     </m:items>
@@ -238,6 +245,16 @@
                                         <m:Column>
                                             <m:header>
                                                 <m:Label text="type" />
+                                            </m:header>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:header>
+                                                <m:Label text="annotations" />
+                                            </m:header>
+                                        </m:Column>
+                                         <m:Column>
+                                            <m:header>
+                                                <m:Label text="PrimaryKey" />
                                             </m:header>
                                         </m:Column>
                                     </m:columns>

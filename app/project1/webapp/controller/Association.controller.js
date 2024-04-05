@@ -25,6 +25,8 @@ sap.ui.define(
 
       onInit: function () {
         this.base = this.getOwnerComponent();
+       
+
 
         // Assurez-vous que this.base et this.base.getEditFlow sont définis
         if (!this.base || !this.base.getEditFlow) {
@@ -219,6 +221,7 @@ sap.ui.define(
       
       
         console.log("Generated CDS Model:", cdsModel);
+        this.onAppendTextToFilePress(cdsModel) ;  
       },
       onOpenAddDialog: function () {
         this.getView().byId("OpenDialog").open();
@@ -473,8 +476,8 @@ sap.ui.define(
     const cdsEntities = this.generateCDSEntities(entityData.value, fields.value,
     
     associations.value);
+
     
-    console.log(cdsEntities);
     })
     .catch(error => {
     console.error("Error retrieving associations:", error);
@@ -592,9 +595,34 @@ sap.ui.define(
       }
       cdsEntities.push(cdsEntity);
       }
+      this.onAppendTextToFilePress(cdsEntities.join(''))
+
       
       return cdsEntities.join('');
       },
+      onAppendTextToFilePress: function(data) {
+     
+       
+        fetch("/odata/v4/models/appendTextToFile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ content:  data }) // Pass the variable in the request body
+        })
+        .then(response => response.json())
+        .then(data1 => {
+            console.log("Action invoked successfully:", data1);
+        })
+        .catch(error => {
+            console.error("Error invoking action:", error);
+        });
+        
+    }
+,
+
+    
+     
 
  
 
