@@ -3,10 +3,15 @@ sap.ui.define(
         "sap/ui/core/mvc/Controller",
         "sap/f/library",
         "sap/m/MessageToast",
+        "sap/ui/core/Fragment",
+        "sap/ui/model/Filter",
+        "sap/ui/model/FilterOperator",
+        "sap/m/MessageBox"
+
 
 
     ],
-    function (BaseController, fioriLibrary,MessageToast) {
+    function (BaseController, fioriLibrary,MessageToast,Fragment,Filter,FilterOperator,MessageBox) {
         "use strict";
 
         return BaseController.extend("app.project1.controller.Fields", {
@@ -34,6 +39,16 @@ sap.ui.define(
                 var oViewModel = new sap.ui.model.json.JSONModel({
                     showTable: false // Initially set to false to hide the table
                 });
+
+                var AssociationType = {
+                    "Type": [
+                      { key: 0, type: "ManyToMany " },
+                      { key: 1, type: "ManyToOne " },
+                      { key: 2, type: "OneToOne" },
+                    ]
+                  };
+                  var oModel = new sap.ui.model.json.JSONModel(AssociationType);
+                  this.getView().setModel(oModel, "AssociationType");
                 this.getView().setModel(oViewModel, "viewModel");
               
                 var oModel = new sap.ui.model.json.JSONModel(actions);
@@ -369,6 +384,183 @@ sap.ui.define(
                 Model.setProperty("/layout", "OneColumn");
                 this.getOwnerComponent().getRouter().navTo("Listview");
             },
+            onCreate: function() {
+                var oModel = this.getView().getModel("mainModel");
+                var input1 = this.getView().byId("sourceInput").getValue();
+                var input2 = this.getView().byId("targetInput").getValue();
+                var type = this.getView().byId("associationtype").getValue();
+                var sUrl1 = oModel.sServiceUrl + "/Entity";
+                var entity1 = {};
+                var entity2 = {};
+                if (oModel) {
+                    fetch(sUrl1)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(entityData => {
+                            console.log("Entity Data:", entityData);
+                            const entities = entityData.value;
+                            entities.forEach(element => {
+                                console.log("aaaaaaaaaaaaaaaaaaaaaaa", element.name)
+                                if (element.name == input1) {
+                                    entity1 = element;
+                                }
+                                if (element.name == input2) {
+                                    entity2 = element;
+                                }
+                                
+                            } );
+                            // Vérifier si les entités source et cible sont identiques
+                            if (entity1 === entity2) {
+                                this.showSameEntityConfirmationPopup();
+                            } else {
+                                var oBindList = oModel.bindList("/Association");
+                                oBindList.create({
+                                    entitySource: entity1,
+                                    entityTarget: entity2,
+                                    type: type
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error retrieving entities:", error);
+                        });
+                } else {
+                    console.error("Model 'mainModel' is not defined or accessible in the view.");
+                }
+            },
+            onSuggestionItemSelected: function (oEvent) {
+                var oItem = oEvent.getParameter("selectedItem");
+                var oText = oItem ? oItem.getKey() : "";
+        
+        
+                this.byId("selectedKeyIndicator").setText(oText);
+              },
+              onSuggestionItemSelected1: function (oEvent) {
+                var oItem = oEvent.getParameter("selectedItem");
+                var oText = oItem ? oItem.getKey() : "";
+        
+        
+                this.byId("selectedKeyIndicator").setText(oText);
+              },
+              onValueHelpRequest: function (oEvent) {
+                var sInput = oEvent.getSource();
+                var sInputValue = oEvent.getSource().getValue(),
+                  oView = this.getView();
+        
+                if (!this._pValueHelpDialog) {
+                  this._pValueHelpDialog = Fragment.load({
+                    id: oView.getId(),
+                    name: "app.project1.view.ValueHelpDialog",
+                    controller: this
+                  }).then(function (oDialog) {
+                    oView.addDependent(oDialog);
+                    return oDialog;
+                  });
+                }
+                this._pValueHelpDialog.then(function (oDialog) {
+                  // Create a filter for the binding
+                  oDialog.getBinding("items").filter([new Filter("name", FilterOperator.Contains, sInputValue)]);
+                  // Open ValueHelpDialog filtered by the input's value
+                  oDialog.open(sInputValue);
+                });
+              },
+              onValueHelpDialogSearch: function (oEvent) {
+                var sValue = oEvent.getParameter("value");
+                var oFilter = new Filter("name", FilterOperator.Contains, sValue);
+        
+                oEvent.getSource().getBinding("items").filter([oFilter]);
+              },
+        
+              onValueHelpDialogClose: function (oEvent) {
+                var sDescription,
+                  oSelectedItem = oEvent.getParameter("selectedItem");
+                oEvent.getSource().getBinding("items").filter([]);
+        
+                if (!oSelectedItem) {
+                  return;
+                }
+        
+        
+                sDescription = oSelectedItem.getDescription();
+                this.byId("sourceInput").setValue(sDescription);
+        
+        
+        
+        
+        
+        
+        
+              },
+        
+              
+              onValueHelpRequest1: function (oEvent) {
+                var sInputValue = oEvent.getSource().getValue(),
+                  oView = this.getView();
+        
+                if (!this._pValueHelpDialog1) {
+                  this._pValueHelpDialog1 = Fragment.load({
+                    id: oView.getId(),
+                    name: "app.project1.view.ValueHelp",
+                    controller: this
+                  }).then(function (oDialog) {
+                    oView.addDependent(oDialog);
+                    return oDialog;
+                  });
+                }
+                this._pValueHelpDialog1.then(function (oDialog) {
+                  // Create a filter for the binding
+                  oDialog.getBinding("items").filter([new Filter("name", FilterOperator.Contains, sInputValue)]);
+                  // Open ValueHelpDialog filtered by the input's value
+                  oDialog.open(sInputValue);
+                });
+              },
+        
+              onValueHelpDialogSearch1: function (oEvent) {
+                var sValue = oEvent.getParameter("value");
+                var oFilter = new Filter("name", FilterOperator.Contains, sValue);
+        
+                oEvent.getSource().getBinding("items").filter([oFilter]);
+              },
+        
+              onValueHelpDialogClose1: function (oEvent) {
+                var sDescription,
+                  oSelectedItem = oEvent.getParameter("selectedItem");
+                oEvent.getSource().getBinding("items").filter([]);
+        
+                if (!oSelectedItem) {
+                  return;
+                }
+        
+        
+                sDescription = oSelectedItem.getDescription();
+                this.byId("targetInput").setValue(sDescription);
+        
+              },
+              showSameEntityConfirmationPopup: function() {
+                var that = this;
+                var dialog = sap.m.MessageBox.show(
+                    "You have selected the same entity for both the source and target entities. Please select different entities",
+                    {
+                        icon: sap.m.MessageBox.Icon.WARNING,
+                        title: "Confirmation",
+                        actions: [sap.m.MessageBox.Action.OK],
+                        onClose: function(oAction) {
+                            if (oAction === sap.m.MessageBox.Action.OK) {
+                                // L'utilisateur a choisi de continuer, rien à faire ici
+                            }
+                        }
+                    }
+                );
+            
+                // Désactiver le bouton "OK" après l'affichage de la boîte de dialogue
+                dialog.getBeginButton().setEnabled(false);
+            },
+
+
           
         });
     },

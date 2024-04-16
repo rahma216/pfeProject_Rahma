@@ -259,47 +259,71 @@
                                         </m:Column>
                                     </m:columns>
                                 </m:Table>
+                             
 
-                                <m:Button text="Show Table"
-                                    press="onShowTablePress" />
-
-                                <m:Table id="dynamicTable"
-                                    items="{/entityData}"
-                                    visible="{viewModel>/showTable}">
-                                    <m:columns>
-                                        <m:Column>
-                                            <m:header>
-                                                <m:Text text="ID" />
-                                            </m:header>
-                                        </m:Column>
-                                        <m:Column>
-                                            <m:header>
-                                                <m:Text text="Name" />
-                                            </m:header>
-                                        </m:Column>
-                                        <m:Column>
-                                            <m:header>
-                                                <m:Text text="Fields" />
-                                            </m:header>
-                                        </m:Column>
-                                    </m:columns>
-                                    <m:items>
-                                        <m:ColumnListItem>
-                                            <m:cells>
-                                                <m:Text
-                                                    text="{= ${ID} === ${detailModel>ID} ? ${ID} : ${ID}}" />
-                                                <m:Text text="{name}" />
-                                                <m:Text
-                                                    text="{ path: 'fields', formatter: '.formatFieldsValue' }" />
-                                            </m:cells>
-                                        </m:ColumnListItem>
-                                    </m:items>
-                                </m:Table>
+                              
                             </m:VBox>
+       
                         </blocks>
 					</ObjectPageSubSection>
                 </subSections>
             </ObjectPageSection>
+             <ObjectPageSection title="Association" showTitle="false"  >
+                    <subSections>
+                      <ObjectPageSubSection >
+
+        <m:VBox >
+        <m:Label text="Association "  />
+		<m:Input
+			id="sourceInput"
+			textFormatMode="KeyValue"
+			placeholder="Source Entity"
+			showSuggestion="true"
+			showValueHelp="true"
+			value="{mainModel>name}"
+		
+			
+			>
+		
+		</m:Input>
+			<m:Input
+			id="targetInput"
+			textFormatMode="KeyValue"
+			placeholder="Target Entity"
+			showSuggestion="true"
+			showValueHelp="true"
+			valueHelpRequest=".onValueHelpRequest1"
+			suggestionItems="{mainModel>/Entity}"
+			suggestionItemSelected=".onSuggestionItemSelected1">
+			<m:suggestionItems>
+				<core:ListItem
+					text="{mainModel>name}"
+				 />
+			</m:suggestionItems>
+		</m:Input>
+		<m:HBox >
+		
+		  <m:ComboBox placeholder="Type"
+			class="sapUiSmallMarginBottom"
+			id="associationtype"
+			items="{ path: 'AssociationType>/Type' }">
+ 			<core:ListItem key="{AssociationType>type}"
+ 			text="{AssociationType>type}" />
+		</m:ComboBox>
+		<m:Button
+			id="association"
+			text="Association"
+			press="onCreate"
+			type="Emphasized"
+			icon="sap-icon://collaborate"
+			 />
+			
+		</m:HBox>
+        </m:VBox>
+                      </ObjectPageSubSection>
+                </subSections>
+            </ObjectPageSection>
+
         </sections>
 
         <footer>

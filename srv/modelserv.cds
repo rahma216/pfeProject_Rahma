@@ -10,6 +10,11 @@ service modelsService{
      entity Association as projection on models.Association;
 
     action appendTextToFile(content: String) returns { success: Boolean };
+    action ExecuteCommand (command: String);
+    action appendServiceToFile(content: String) returns { success: Boolean };
+
+
+
 
 
 

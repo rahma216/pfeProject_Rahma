@@ -42,6 +42,10 @@ modules:
       - appproject1.zip
       name: appproject1
       target-path: resources/
+    - artifacts:
+      - project2.zip
+      name: project2
+      target-path: resources/
 - name: appgenerator
   type: html5
   path: app/app_generator
@@ -55,6 +59,16 @@ modules:
 - name: appproject1
   type: html5
   path: app/project1
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: project2
+  type: html5
+  path: app/project2
   build-parameters:
     build-result: dist
     builder: custom

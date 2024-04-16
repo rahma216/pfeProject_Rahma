@@ -8,7 +8,7 @@ using { cuid, managed} from '@sap/cds/common';
 type FieldType : String enum {
   boolean;
   int;
-  float;
+  float; 
   string
 }
 
