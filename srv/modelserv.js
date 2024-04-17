@@ -9,7 +9,7 @@ module.exports = cds.service.impl((srv) => {
             const data = req.data.content;
 
             // Provide the correct file path
-            const filePath = '/home/user/projects/ClientProject/db/schema.cds';
+            const filePath = '/home/user/projects/Pfe/ClientProject/db/schema.cds';
        
             // Write the value of "content" to the file
             fs.appendFileSync(filePath, data + '\n'); // Append a newline after each entry
@@ -27,7 +27,7 @@ module.exports = cds.service.impl((srv) => {
             const data = req.data.content;
 
             // Provide the correct file path
-            const filePath = '/home/user/projects/ClientProject/srv/modelserv.cds';
+            const filePath = '/home/user/projects/Pfe/ClientProject/srv/modelserv.cds';
        
             // Write the value of "content" to the file
             fs.appendFileSync(filePath, data + '\n'); // Append a newline after each entry
