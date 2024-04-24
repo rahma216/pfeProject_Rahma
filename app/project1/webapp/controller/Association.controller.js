@@ -723,7 +723,26 @@ onOpenAddDialog3: function () {
 onCancelDialog3: function (oEvent) {
   this.getView().byId("mainDialog3").close();
 },
-
+onExecuteCommandPress: function(data) {
+     
+       
+  fetch("/odata/v4/models/ExecuteCommand", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ command:  "/home/user/projects/clientproject/yoListreport.sh" }) // Pass the variable in the request body
+  })
+  .then(response => response.json())
+  .then(data1 => {
+      console.log("Action invoked successfully:", data1);
+      this.UIgen();
+  })
+  .catch(error => {
+      console.error("Error invoking action:", error);
+  });
+ 
+},
 
 
   

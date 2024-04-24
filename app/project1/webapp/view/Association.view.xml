@@ -369,26 +369,27 @@
 		<footer>
 			<OverflowToolbar id="otbFooter">
 				<ToolbarSpacer/>
-					<Button
-			id="aa"
-			text="GenenrateService"
-			press="generateService"
-			type="Accept"
-			icon="sap-icon://collaborate"
-			 />
-			 <Button
-			 
-			id="cds"
-			text="GenerateCds"
-			press=".OnCdsgen"
-			type="Accept"
-			 />
-				 <Button
-			id="rahma"
-			text="ui"
-			press="UIgen"
-			type="Accept"
-			 />
+		<Button
+                    id="cds"
+                    text="GenerateCds"
+                    press=".OnCdsgen"
+                    type="Accept"
+                    icon="sap-icon://clinical-order"
+                />
+                <Button
+                    id="aa"
+                    text="GenenrateService"
+                    press="generateCDSModel"
+                    type="Accept"
+                    icon="sap-icon://write-new-document"
+                />
+                <Button
+                    id="ui"
+                    text="GenenrateUI"
+                    press="onExecuteCommandPress"
+                    type="Accept"
+                    icon="sap-icon://sap-ui5"
+                />
 
 			
 					<Button
