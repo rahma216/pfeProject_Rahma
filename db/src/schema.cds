@@ -11,8 +11,28 @@ type FieldType : String enum {
   float; 
   string
 }
+entity Association :cuid, managed{
+  entitySource : Association to Entity;
+  entityTarget  : Association to Entity;
+  type : String;
 
 
+}
+
+
+
+
+
+entity Entity : cuid, managed {
+    key ID       : String;
+    name        : String;
+    fields      : Association to many Field on fields.fld = $self;
+
+
+}
+
+
+ 
 entity Field : cuid, managed {
     key ID       : String;
     value       : String;
@@ -23,22 +43,3 @@ entity Field : cuid, managed {
 
 
 }
-
-
-entity Entity : cuid, managed {
-    key ID       : String;
-    name        : String;
-    fields      : Association to many Field on fields.fld = $self;
-
-
-}
-entity Association :cuid, managed{
-  entitySource : Association to Entity;
-  entityTarget  : Association to Entity;
-  type : String;
-
-
-}
-
-
- 

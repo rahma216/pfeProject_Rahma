@@ -1,19 +1,34 @@
-sap.ui.define(
-  [
-    "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel",
-    "sap/ui/core/dnd/DragInfo",
-    "sap/ui/core/dnd/DropInfo",
-    "sap/f/dnd/GridDropInfo",
-    "./../RevealGrid/RevealGrid",
-    "sap/ui/core/library",
-    
+sap.ui.define([
+  "sap/ui/core/mvc/Controller",
+  "sap/ui/core/dnd/DragInfo",
+  "sap/f/dnd/GridDropInfo",
+  "./../RevealGrid/RevealGrid",
+  "sap/ui/core/library",
+  "sap/ui/core/Fragment",
+  "sap/ui/model/json/JSONModel",
+  "sap/ui/model/Filter",
+  "sap/ui/model/FilterOperator",
+  "sap/m/MessageBox",
+  "sap/ui/core/syncStyleClass",
+  "sap/m/MessageToast",
+  "sap/ui/core/dnd/DropInfo",
+], function (
+  Controller,
+  DragInfo,
+  GridDropInfo,
+  RevealGrid,
+  coreLibrary,
+  Fragment,
+  JSONModel,
+  Filter,
+  FilterOperator,
+  MessageBox,
+  syncStyleClass,
+  MessageToast,DropInfo
+) {
+  "use strict";
 
-
-  ],
-  function (Controller, JSONModel, DragInfo, DropInfo, GridDropInfo, RevealGrid, coreLibrary, Fragment, Filter, FilterOperator,MessageBox) {
-    "use strict";
-    var DropLayout = coreLibrary.dnd.DropLayout;
+  var DropLayout = coreLibrary.dnd.DropLayout;
 
     // shortcut for sap.ui.core.dnd.DropPosition
     var DropPosition = coreLibrary.dnd.DropPosition;
@@ -21,10 +36,11 @@ sap.ui.define(
     return Controller.extend("app.project1.controller.Association", {
 
       onInit: function () {
+        this.test="";
+     
         this.base = this.getOwnerComponent();
        
-
-
+        var increment=0;
         // Assurez-vous que this.base et this.base.getEditFlow sont définis
         if (!this.base || !this.base.getEditFlow) {
             console.error("Base or getEditFlow is undefined.");
@@ -199,10 +215,12 @@ sap.ui.define(
           this.table.push(title);
         }.bind(this));
       },
-      generateCDSModel: function() {
+      /////////////////////service generator
+      generateService: function() {
         var cdsModel = "service modelsService {\n";
-        this.table.forEach(function(entity) {
-            cdsModel += "\n\tentity models_" + entity + " as projection on models." + entity + ";";
+      
+      this.table.forEach(function(entity) {
+            cdsModel += "\n\tentity " + entity + " as projection on models." + entity + ";";
         });
       
       
@@ -210,8 +228,38 @@ sap.ui.define(
       
       
         console.log("Generated CDS Model:", cdsModel);
-        this.onAppendServiceToFilePress(cdsModel) ;  
+        this.onAppendServiceToFilePress(`using models from '../db/models.cds'; \n`+ cdsModel) ;  
+        this.showCDSserviceGenerationPopup();
       },
+      generateService2: function(test) {
+        var cdsModel = "service modelsService {\n";
+        var table2 = [test]; // Start with the 'test' element in table2
+    
+        // If 'this.table' is not empty and 'this.test' is a string
+        if (this.table.length > 0 && typeof test === 'string') {
+            // Filter out the 'test' string from 'this.table' and add the rest to 'table2'
+            table2 = table2.concat(this.table.filter(item => item.trim() !== test.trim()));
+        } else {
+            console.error("Either 'this.table' is empty or 'this.test' is not a string.");
+        }
+    
+        console.log(this.table);
+        console.log("taaaablaaa", table2);
+        
+
+       table2.forEach(function(entity) {
+            cdsModel += "\n\tentity " + entity + " as projection on models." + entity + ";";
+        });
+      
+      
+        cdsModel += "\n}";
+      
+      
+        console.log("Generated CDS Model:", cdsModel);
+        this.onAppendServiceToFilePress(`using models from '../db/models.cds'; \n`+ cdsModel) ;  
+
+      },
+
       onOpenAddDialog: function () {
         this.getView().byId("OpenDialog").open();
       },
@@ -309,17 +357,22 @@ sap.ui.define(
     } else {
     console.error("Main model not found");
     }
+    this.showCDSmodelGenerationPopup();
     
     },
+
+
+
+
     generateCDSEntities: function (entityData, fieldsData, associationsData) {
       const cdsEntities = [];
-      
+     
       for (const entity of entityData) {
       const entityName = entity.name;
       const entityFields = fieldsData.filter(field => field.fld_ID === entity.ID);
-      
+     
       let cdsEntity = `entity ${entityName} {`;
-      
+     
       // Process fields
       for (const field of entityFields) {
         if(field.annotations== null)
@@ -337,85 +390,203 @@ sap.ui.define(
       }
       cdsEntity += fieldString + ';';
         }
-      
+     
       }
-      
+     
       const entityAssociations = associationsData.filter(association =>
       association.entitySource_ID === entity.ID || association.entityTarget_ID === entity.ID
       );
       var ismanytomany = false;
-      
+     
       for (const association of entityAssociations) {
       const isManyToOne = association.type === 'ManyToOne';
       const isOneToOne = association.type === 'OneToOne';
       const isManyToMany = association.type === 'ManyToMany';
       const isSourceEntity = association.entitySource_ID === entity.ID;
       const isTargetEntity = association.entityTarget_ID === entity.ID;
-      
-      if (isManyToOne && isTargetEntity) {
-      const sourceEntity = entityData.find(e => e.ID === association.entitySource_ID);
-      if (sourceEntity) {
-      cdsEntity += `\n\tfld : Association to ${sourceEntity.name};`;
-      }
-      }
-      
+     
       if (isManyToOne && isSourceEntity) {
       const targetEntity = entityData.find(e => e.ID === association.entityTarget_ID);
       if (targetEntity) {
-      cdsEntity += `\n\t${targetEntity.name}s : Association to many ${targetEntity.name}`;
-      
-      cdsEntity += `\n\t on ${targetEntity.name}s.fld = $self;`;
+      cdsEntity += `\n\tfld : Association to ${targetEntity.name};`;
+      }
+      }
+     
+      if (isManyToOne && isTargetEntity) {
+      const sourceEntity = entityData.find(e => e.ID === association.entitySource_ID);
+      if (sourceEntity) {
+        const lowersourceEntity=sourceEntity.name.toLowerCase();
+      cdsEntity += `\n\t${lowersourceEntity} : Association to many ${sourceEntity.name}`;
+     
+      cdsEntity += `\ton ${lowersourceEntity}.fld = $self;`;
       }
       }
       if (isOneToOne && isSourceEntity) {
       const targetEntity = entityData.find(e => e.ID === association.entityTarget_ID);
       if (targetEntity) {
-      var st= targetEntity.name;
-      cdsEntity += `\n\t${st.substring(0, 4)} : Association to many ${targetEntity.name}`;
-      
+      var st= entity.name.toLowerCase();
+     
+      cdsEntity += `\n\t${st}${targetEntity.name} : Association to ${targetEntity.name};`;
+     
       }
       }
-      
+      if (isOneToOne && isTargetEntity) {
+        const sourceEntity = entityData.find(e => e.ID === association.entitySource_ID);
+        if (sourceEntity) {
+        var st= sourceEntity.name.toLowerCase()
+       
+        cdsEntity += `\n\t${st} : Association to ${sourceEntity.name};`;
+       
+        }
+        }
+     
       if (isManyToMany && isSourceEntity) {
       ismanytomany = true;
-      const sourceEntity = entityData.find(e => e.ID === association.entitySource_ID);
       const targetEntity = entityData.find(e => e.ID === association.entityTarget_ID);
-      
-      var str1 = sourceEntity.name;
-      var str2 = targetEntity.name;
-      var ch1 = str1.substring(0, 3);
-      var ch2 = str2.substring(0, 3);
+ 
+     
+      var str1 = entity.name.toLowerCase();
+      var str2 = targetEntity.name.toLowerCase();
+      var ch1=entity.name ;
+      var ch2=targetEntity.name ;
+ 
+ 
       var newname =ch1 + "2" + ch2;
-      
-      if (targetEntity) {
-      cdsEntity += `\n\t${targetEntity.name}s : Association to many ${newname}`;
-      cdsEntity += `\n\t on ${targetEntity.name}s.${ch1} = $self;`;
+      cdsEntity += `\n\t${str2}s : Composition of many ${entity.name}To${targetEntity.name} on ${str2}s.${str1}=$self;`;
+ 
+     
+     
+      }
+      if (isManyToMany && isTargetEntity) {
+        const sourceEntity = entityData.find(e => e.ID === association.entitySource_ID);
+        var str1=sourceEntity.name.toLowerCase() ;
+        var str2=entity.name.toLowerCase();
+ 
+      cdsEntity += `\n\t${str1}s : Composition of many ${sourceEntity.name}To${entity.name} on ${str1}s.${str2}=$self;`;
       }
       }
-      }
-      
+     
       if (ismanytomany === true) {
-      
+     
       cdsEntity += `\n}\n`;
-      cdsEntity += `entity ${newname} {
-      \n\tkey ${ch1} : Association to ${str1};
-      \n\tkey ${ch2} : Association to ${str2};
+      cdsEntity += `entity ${ch1}To${ch2} {
+      \n\tkey ${str1} : Association to ${ch1};
+      \n\tkey ${str2} : Association to ${ch2};
       \n}\n`;
-      
+     
       }
       else {
       cdsEntity += `\n}\n`;
       }
       cdsEntities.push(cdsEntity);
       }
-      this.onAppendTextToFilePress(cdsEntities.join(''))
-
-      
+      this.onAppendTextToFilePress(  ` namespace models;
+      using { cuid, managed} from '@sap/cds/common';\n`+ cdsEntities.join(''))
+ 
+     
       return cdsEntities.join('');
       },
-      onAppendTextToFilePress: function(data) {
-     
+/////////////////////////////////////////////////////////////////////////
+UIgen: function () {
+  var entityName = this.test;
+
+   console.log("tttttttttttttttttttttttttttttttttt",entityName)
+  var oModel = this.getView().getModel("mainModel");
+  var sUrl1 = oModel.sServiceUrl + "/Entity";
+  var sUrl2 = oModel.sServiceUrl + "/Field";
+  
+  if (oModel) {
+  console.log("Main model found");
+  
+  // Fetch entity data
+  fetch(sUrl1)
+  .then(response => {
+  if (!response.ok) {
+  throw new Error('Network response was not ok');
+  }
+  return response.json();
+  })
+  .then(entityData => {
+  console.log("Entity Data:", entityData);
+  
+  const entities = entityData.value;
+  // Fetch field data
+  fetch(sUrl2)
+  .then(response => {
+  if (!response.ok) {
+  throw new Error('Network response was not ok');
+  }
+  return response.json();
+  })
+  .then(fields => {
+  console.log("Fields:", fields);
+ 
+  
+  // Associez les champs aux entités
+  entities.forEach(entity => {
+      if(entityName == entity.name){
+      
+          const entityFields = fields.value.filter(field => field.fld_ID === entity.ID);
+          let annotationSyntax = `annotate service.${entityName} with @(`;
+          annotationSyntax += `\n    UI.FieldGroup #GeneratedGroup : {`;
+          annotationSyntax += `\n        $Type : 'UI.FieldGroupType',`;
+          annotationSyntax += `\n        Data : [`;
+        
+          entityFields.forEach((field) => {
+              annotationSyntax += `\n            {`;
+              annotationSyntax += `\n                $Type : 'UI.DataField',`;
+              annotationSyntax += `\n                Label : '${field.value}',`;
+              annotationSyntax += `\n                Value : ${field.value},`;
+              annotationSyntax += `\n            },`;
+          });
+        
+          annotationSyntax += `\n        ],`;
+          annotationSyntax += `\n    },`;
+          annotationSyntax += `\n    UI.Facets : [`;
+          annotationSyntax += `\n        {`;
+          annotationSyntax += `\n            $Type : 'UI.ReferenceFacet',`;
+          annotationSyntax += `\n            ID : 'GeneratedFacet1',`;
+          annotationSyntax += `\n            Label : 'General Information',`;
+          annotationSyntax += `\n            Target : '@UI.FieldGroup#GeneratedGroup',`;
+          annotationSyntax += `\n        },`;
+          annotationSyntax += `\n    ],`;
+          annotationSyntax += `\n    UI.LineItem : [`;
+        
+          entityFields.forEach((field) => {
+              annotationSyntax += `\n        {`;
+              annotationSyntax += `\n            $Type : 'UI.DataField',`;
+              annotationSyntax += `\n            Label : '${field.value}',`;
+              annotationSyntax += `\n            Value : ${field.value},`;
+              annotationSyntax += `\n        },`;
+          });
+        
+          annotationSyntax += `\n    ],`;
+          annotationSyntax += `\n);`;
+          console.log(annotationSyntax)
+        
        
+      }
+
+  });
+
+  
+  })
+  .catch(error => {
+  console.error("Error retrieving fields:", error);
+  });
+  })
+  .catch(error => {
+  console.error("Error retrieving entities:", error);
+  });
+  } else {
+  console.error("Main model not found");
+  }
+  this.showCDSmodelGenerationPopup();
+  
+  },
+
+      onAppendTextToFilePress: function(data) {
+   
         fetch("/odata/v4/models/appendTextToFile", {
             method: "POST",
             headers: {
@@ -454,13 +625,109 @@ onAppendServiceToFilePress: function(data) {
 }
 ,
 
-    
-     
+showCDSmodelGenerationPopup: function() {
+  var that = this;
+  var dialog = sap.m.MessageBox.show(
+      "CDS model generated successfully",
+      {
+          icon: sap.m.MessageBox.Icon.WARNING,
+          title: "Confirmation",
+          actions: [sap.m.MessageBox.Action.OK],
+          onClose: function(oAction) {
+              if (oAction === sap.m.MessageBox.Action.OK) {
+        
+              }
+          }
+      }
+  );
 
+  dialog.getBeginButton().setEnabled(false);
+},    
+showCDSserviceGenerationPopup: function() {
+  var that = this;
+  var dialog = sap.m.MessageBox.show(
+      "service generated successfully",
+      {
+          icon: sap.m.MessageBox.Icon.WARNING,
+          title: "Confirmation",
+          actions: [sap.m.MessageBox.Action.OK],
+          onClose: function(oAction) {
+              if (oAction === sap.m.MessageBox.Action.OK) {
+         
+              }
+          }
+      }
+  );
+  dialog.getBeginButton().setEnabled(false);
+},       
+
+//////////////////////////////////////////////////// UI
+onOpenAddDialog: function () {
+  var oDialog = this.getView().byId("mainDialog").open();
+  var oModela = new sap.ui.model.json.JSONModel();
+
+
+  // Access the array from your table
+  var aTableData = this.table;
+  console.log(this.table)
+
+
+  // Construct the Entity array
+  var aEntityData = aTableData.map(function(sItem) {
+    return {
+      name: sItem,
+
+
+    };
+  });
+
+
+  // Set the data to the model
+  oModela.setData({ Entity: aEntityData });
+  console.log(oModela)
+  oDialog.setModel(oModela, "rahmaModel");
+
+
+
+},
+onSelectChange: function(oEvent) {
+  var oSelectedItem = oEvent.getParameter("selectedItem");
+
+  if (oSelectedItem) {
  
+      var sSelectedText = oSelectedItem.getText();
+      this.test=sSelectedText;
+      this.generateService2(this.test);
+      console.log("ttttttt0",this.test)
+
+      console.log("Selected Text:", sSelectedText);
+  } else {
+      console.log("No item selected.");
+  }
+},
+
+onCancelDialog: function (oEvent) {
+  this.getView().byId("mainDialog").close();
+},
+
+onOpenAddDialog1: function () {
+  this.getView().byId("mainDialog1").open();
+},
+onCancelDialog1: function (oEvent) {
+  this.getView().byId("mainDialog1").close();
+},
+
+onOpenAddDialog3: function () {
+  this.getView().byId("mainDialog3").open();
+},
+onCancelDialog3: function (oEvent) {
+  this.getView().byId("mainDialog3").close();
+},
+
 
 
   
+
 
 
 

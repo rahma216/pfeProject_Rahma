@@ -1,10 +1,12 @@
+
 <mvc:View
     controllerName="app.project1.controller.Association"
     xmlns="sap.m"
 
     xmlns:mvc="sap.ui.core.mvc"
 	xmlns:l="sap.ui.layout"
-  	xmlns:f="sap.f"
+    xmlns:f="sap.f"
+    xmlns:form="sap.ui.layout.form"
     xmlns:card="sap.f.cards"
     xmlns:w="sap.ui.integration.widgets"
     displayBlock="true"
@@ -52,34 +54,313 @@
 						<card:Header title="{name}" />
 					</f:header>
 						<f:content>
-			<List
-				class="sapUiSmallMarginBottom"
-				showSeparators="None"
-				items="{
-					path: '/'
-				}">
-				<CustomListItem>
-					<HBox alignItems="Center" justifyContent="SpaceBetween">
-						<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-							<Title level="H3" text="{name}" />
-							<Text text="{ID}" />
-						</VBox>
-						<ObjectStatus
-							class="sapUiTinyMargin sapUiSmallMarginEnd"
-							text="{name}"
-							 />
-					</HBox>
-				</CustomListItem>
-			</List>
+
+
 		</f:content>
 				</f:Card>
-					
+					 
+           
 
 			</f:GridContainer>
 		
 		</HBox>
 			
-			
+			 <VBox>
+        <ObjectHeader title="Welcome!Let's bring your ideas to life. Start by generating your personalized ui"
+                            intro="Template Selection : Choose your application template."
+                            responsive="true" titleLevel="H5"/>
+           
+ 
+ 
+        <f:GridContainer
+            id="demoGrid"
+            class="sapUiSmallMargin"
+            columnsChange=".onGridColumnsChange"
+           
+        >
+            <f:layout>
+                <f:GridContainerSettings
+                    rowSize="84px"
+                    columnSize="84px"
+                    gap="8px"
+                />
+            </f:layout>
+            <f:layoutXS>
+                <f:GridContainerSettings
+                    rowSize="70px"
+                    columnSize="70px"
+                    gap="8px"
+                />
+            </f:layoutXS>
+            <f:Card  >
+           
+                <f:layoutData>
+                    <f:GridContainerItemLayoutData   columns="2" />
+                </f:layoutData>
+                <f:header>
+                    <card:Header
+                        title="List Report Page"
+                        press="onPress"
+                    />
+                </f:header>
+                <f:content >
+                    <VBox
+                        height="115px"
+                        class="sapUiSmallMargin"
+                        justifyContent="SpaceBetween"
+                    >
+                        <Text
+                            text="Create an SAP Fiori elements application containing a list report and an object page."
+                        />
+                        <Link
+                            text="More Information"
+                            target="_blank"
+                            href="https://help.sap.com/docs/SAP_FIORI_tools/17d50220bcd848aa854c9c182d65b699/2b2b12e708944d85a40d087194cc1edd.html?locale=en-US"
+                        />
+                         <Button
+                    icon="sap-icon://arrow-right"
+                    tooltip="selected template"
+                    press="onOpenAddDialog"
+                />
+                    </VBox>
+                </f:content>
+            </f:Card>
+            <f:Card>
+                <f:layoutData>
+                    <f:GridContainerItemLayoutData  columns="2" />
+                </f:layoutData>
+                <f:header>
+                    <card:Header
+                        title="Custom Page"
+                        press="onPress"
+                    />
+                </f:header>
+                <f:content >
+                    <VBox
+                        height="115px"
+                        class="sapUiSmallMargin"
+                        justifyContent="SpaceBetween"
+                    >
+                        <Text
+                            text="Create a Fiori elements app with a custom page."
+                        />
+                        <Link
+                            text="More Information"
+                            target="_blank"
+                            href="https://help.sap.com/docs/SAP_FIORI_tools/17d50220bcd848aa854c9c182d65b699/2b2b12e708944d85a40d087194cc1edd.html?locale=en-US"
+                        />
+                         <Button
+                    icon="sap-icon://arrow-right"
+                    tooltip="selected template"
+                    press="onAddButtonPress"
+                />
+                    </VBox>
+                </f:content>
+            </f:Card>
+            <f:Card>
+                <f:layoutData>
+                    <f:GridContainerItemLayoutData columns="2"   />
+                </f:layoutData >
+                <f:header>
+                    <card:Header
+                        title="Basic Page"
+                        press="onPress"
+                    />
+                </f:header>
+                <f:content>
+                    <VBox
+                        height="115px"
+                        class="sapUiSmallMargin"
+                        justifyContent="SpaceBetween"
+                    >
+                        <Text
+                            text="Create a freestyle application, starting with an empty page."
+                        />
+                         <Link
+                            text="More Information"
+                            target="_blank"
+                            href="https://help.sap.com/docs/SAP_FIORI_tools/17d50220bcd848aa854c9c182d65b699/2b2b12e708944d85a40d087194cc1edd.html?locale=en-US"
+                        />
+                         <Button
+                    icon="sap-icon://arrow-right"
+                    tooltip="selected template"
+                    press="onAddButtonPress"
+                />
+                    </VBox>
+                </f:content>
+            </f:Card>
+        </f:GridContainer>
+        </VBox>
+           
+           <Dialog
+                id="mainDialog"
+                title="List Report"
+                
+            >
+                <content>
+                    <VBox
+                        class="sapUiSmallMargin"
+                        id="formContainer"
+                    >
+                        <form:SimpleForm
+                            id="SimpleFormChangeColumn_twoGroups234"
+                            editable="true"
+                            title="Template Information"
+                        >
+                            <form:content>
+                                <Label text="Project Name" />
+                                <Input
+                                    required="true"
+                                    change="onChange"
+                                />
+                                <Label text="Application Title" />
+                                <Input value="" />
+ 
+                                <Label text="Template Namespace" />
+ 
+                                <Input value="" />
+ 
+                                <Label text="Application Description" />
+                                <Input value="" />
+                                <Label text="Main Entity" />
+                               <Select id="choice1" items="{rahmaModel>/Entity}" change=".onSelectChange">
+    <core:Item key="{rahmaModel>name}" text="{rahmaModel>name}" />
+</Select>
+
+                            </form:content>
+                        </form:SimpleForm>
+                    </VBox>
+                </content>
+                <footer>
+                    <Toolbar>
+                        <content>
+                            <ToolbarSpacer />
+                            <Button
+                                type="Accept"
+                                text="Save"
+                                press="._generateInvalidUserInput"
+                            />
+                            <Button
+                                id="Reject"
+                                text="Reject"
+                                type="Reject"
+                                press=".onCancelDialog"
+                                ariaHasPopup="Dialog"
+                            />
+                        </content>
+                    </Toolbar>
+                </footer>
+            </Dialog>
+             <Dialog
+                id="mainDialog1"
+                title="Custom Page"
+            >
+                <content>
+                    <VBox
+                        class="sapUiSmallMargin"
+                        id="formContainer1"
+                    >
+                        <form:SimpleForm
+                            id="SimpleFormChangeColumn_twoGroups2341"
+                            editable="true"
+                            title="Template Information"
+                        >
+                            <form:content>
+                                <Label text="Project Name" />
+                                <Input
+                                    required="true"
+                                    change="onChange"
+                                />
+                                <Label text="Application Title" />
+                                <Input value="" />
+ 
+                                <Label text="Template Namespace" />
+ 
+                                <Input value="" />
+ 
+                                <Label text="Application Description" />
+                                <Input value="" />
+                                <Label text="Main Entity" />
+                                <Select id="Mainentity1" />
+                            </form:content>
+                        </form:SimpleForm>
+                    </VBox>
+                </content>
+                <footer>
+                    <Toolbar>
+                        <content>
+                            <ToolbarSpacer />
+                            <Button
+                                type="Accept"
+                                text="Save"
+                                press="._generateInvalidUserInput"
+                            />
+                            <Button
+                                id="Reject1"
+                                text="Reject"
+                                type="Reject"
+                                press="._closeDialog"
+                                ariaHasPopup="Dialog"
+                            />
+                        </content>
+                    </Toolbar>
+                </footer>
+            </Dialog>
+            <Dialog
+                id="mainDialog3"
+                title="  Basic Page"
+            >
+                <content>
+                    <VBox
+                        class="sapUiSmallMargin"
+                        id="formContainer2"
+                    >
+                        <form:SimpleForm
+                            id="SimpleFormChangeColumn_twoGroups2343"
+                            editable="true"
+                            title="Template Information"
+                        >
+                            <form:content>
+                                <Label text="Project Name" />
+                                <Input
+                                    required="true"
+                                    change="onChange"
+                                />
+                                <Label text="Application Title" />
+                                <Input value="" />
+ 
+                                <Label text="Template Namespace" />
+ 
+                                <Input value="" />
+ 
+                                <Label text="Application Description" />
+                                <Input value="" />
+                                <Label text="Main Entity" />
+                                <Select id="Mainentity2" />
+                            </form:content>
+                        </form:SimpleForm>
+                    </VBox>
+                </content>
+                <footer>
+                    <Toolbar>
+                        <content>
+                            <ToolbarSpacer />
+                            <Button
+                                type="Accept"
+                                text="Save"
+                                press="._generateInvalidUserInput"
+                            />
+                            <Button
+                                id="Reject2"
+                                text="Reject"
+                                type="Reject"
+                                press="._closeDialog"
+                                ariaHasPopup="Dialog"
+                            />
+                        </content>
+                    </Toolbar>
+                </footer>
+            </Dialog>
 	
 		
 
@@ -91,21 +372,32 @@
 					<Button
 			id="aa"
 			text="GenenrateService"
-			press="generateCDSModel"
+			press="generateService"
 			type="Accept"
 			icon="sap-icon://collaborate"
 			 />
 			 <Button
+			 
 			id="cds"
 			text="GenerateCds"
 			press=".OnCdsgen"
 			type="Accept"
 			 />
-			
+				 <Button
+			id="rahma"
+			text="ui"
+			press="UIgen"
+			type="Accept"
+			 />
 
 			
+					<Button
+			text="Show Select Dialog"
+			press=".onSelectDialogPress"
+			class="sapUiSmallMarginBottom"
+			ariaHasPopup="Dialog" />
 				
-				
+
 
 			</OverflowToolbar>
 		</footer>

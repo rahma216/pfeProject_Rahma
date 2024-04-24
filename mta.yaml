@@ -46,6 +46,30 @@ modules:
       - project2.zip
       name: project2
       target-path: resources/
+    - artifacts:
+      - project3.zip
+      name: project3
+      target-path: resources/
+    - artifacts:
+      - project4.zip
+      name: project4
+      target-path: resources/
+    - artifacts:
+      - ttproject4.zip
+      name: ttproject4
+      target-path: resources/
+    - artifacts:
+      - ttprojectrahma.zip
+      name: ttprojectrahma
+      target-path: resources/
+    - artifacts:
+      - projecttest.zip
+      name: projecttest
+      target-path: resources/
+    - artifacts:
+      - ttproject8.zip
+      name: ttproject8
+      target-path: resources/
 - name: appgenerator
   type: html5
   path: app/app_generator
@@ -69,6 +93,66 @@ modules:
 - name: project2
   type: html5
   path: app/project2
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: project3
+  type: html5
+  path: app/project3
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: project4
+  type: html5
+  path: app/project4
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: ttproject4
+  type: html5
+  path: app/project4
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: ttprojectrahma
+  type: html5
+  path: app/projectrahma
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: projecttest
+  type: html5
+  path: app/projecttest
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: ttproject8
+  type: html5
+  path: app/project8
   build-parameters:
     build-result: dist
     builder: custom

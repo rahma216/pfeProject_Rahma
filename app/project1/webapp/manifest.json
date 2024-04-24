@@ -147,6 +147,12 @@
           "target": [
             "Details"
           ]
+        },  {
+          "name": "Association",
+          "pattern": "Association",
+          "target": [
+            "Association"
+          ]
         }
       ],
       "targets": {
@@ -166,6 +172,11 @@
           "viewType": "XML",
           "viewName": "Fields",
 					"controlAggregation": "midColumnPages"
+        },
+        "Association": {
+          "viewType": "XML",
+          "viewName": "Association",
+					"controlAggregation": "endColumnPages"
         }
       }
     },

@@ -42,8 +42,8 @@ sap.ui.define(
 
                 var AssociationType = {
                     "Type": [
-                      { key: 0, type: "ManyToMany " },
-                      { key: 1, type: "ManyToOne " },
+                      { key: 0, type: "ManyToMany" },
+                      { key: 1, type: "ManyToOne" },
                       { key: 2, type: "OneToOne" },
                     ]
                   };
@@ -57,7 +57,7 @@ sap.ui.define(
                 this.getView().setModel(oModel, "annotations");
 
                 var oModel = this.getView().getModel("selectedEntityModel");
-                this.getView().setModel(oModel, "selectedEntityModel");
+                this.getView().setModel(oModel, "selectedEntityModel"); 
 
                 this.oRouter = this.getOwnerComponent().getRouter();
                 this.oRouter.getRoute("Details").attachPatternMatched(this._onFieldsMatched, this);
@@ -81,7 +81,10 @@ sap.ui.define(
             },
             onSupplierPress: function () {
                 var Model = this.getOwnerComponent().getModel("localModel");
-                Model.setProperty("/layout", "ThreeColumnsMidExpanded");
+                this.getOwnerComponent().getRouter().navTo("Association");
+
+                Model.setProperty("/layout", "ThreeColumnsEndExpanded");
+
 
             },
             onCloneInputField: function (event) {
@@ -483,16 +486,9 @@ sap.ui.define(
                 if (!oSelectedItem) {
                   return;
                 }
-        
-        
-                sDescription = oSelectedItem.getDescription();
+                        sDescription = oSelectedItem.getDescription();
                 this.byId("sourceInput").setValue(sDescription);
-        
-        
-        
-        
-        
-        
+
         
               },
         
