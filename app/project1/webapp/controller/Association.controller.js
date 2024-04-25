@@ -562,7 +562,8 @@ UIgen: function () {
         
           annotationSyntax += `\n    ],`;
           annotationSyntax += `\n);`;
-          console.log(annotationSyntax)
+          console.log(annotationSyntax);
+          this.onAppendUIToFilePress(`using modelsService as service from '../../srv/services';` + annotationSyntax);
         
        
       }
@@ -608,6 +609,26 @@ onAppendServiceToFilePress: function(data) {
      
        
   fetch("/odata/v4/models/appendServiceToFile", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content:  data }) // Pass the variable in the request body
+  })
+  .then(response => response.json())
+  .then(data1 => {
+      console.log("Action invoked successfully:", data1);
+  })
+  .catch(error => {
+      console.error("Error invoking action:", error);
+  });
+  
+}
+,
+onAppendUIToFilePress: function(data) {
+     
+       
+  fetch("/odata/v4/models/appendUIToFile", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -733,10 +754,9 @@ onExecuteCommandPress: function(data) {
       },
       body: JSON.stringify({ command:  "/home/user/projects/clientproject/yoListreport.sh" }) // Pass the variable in the request body
   })
-  .then(response => response.json())
-  .then(data1 => {
-      console.log("Action invoked successfully:", data1);
-      this.UIgen();
+  .then(response => {response.json();
+    console.log("Action invoked successfully:uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+    this.UIgen();
   })
   .catch(error => {
       console.error("Error invoking action:", error);

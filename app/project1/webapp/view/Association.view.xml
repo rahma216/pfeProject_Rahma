@@ -399,11 +399,7 @@
                 />
 
 			
-					<Button
-			text="Show Select Dialog"
-			press=".onSelectDialogPress"
-			class="sapUiSmallMarginBottom"
-			ariaHasPopup="Dialog" />
+				
 				
 
 
