@@ -21,20 +21,137 @@ sap.ui.define([
 
 
             },
-            onCreate: function () {
+            _validateInputs: function(aInputs) {
 
-                const oList = this._oTable;
-                const oBinding = oList.getBinding("items");
-                const oContext = oBinding.create({
-                    "ID": this.byId("EntityID").getValue(),
-                    "name": this.byId("EntityNamee").getValue(),
+                var oModel = this.getView().getModel("mainModel");
 
+                var aPromises = [];
+
+           
+
+                aInputs.forEach((oInput) => {
+
+                    var sField = oInput.getId().includes("ID") ? "ID" : "name";
+
+                    var sValue = oInput.getValue();
+
+           
+
+                    var oPromise = new Promise((resolve, reject) => {
+
+                        // Check if the input value is empty
+
+                        if (!sValue) {
+
+                            oInput.setValueState("Error");
+
+                            oInput.setValueStateText("Ce champ est obligatoire et ne peut pas être vide.");
+
+                            resolve(true); // True indicates a validation error
+
+                            return; // Exit early to avoid unnecessary OData call
+
+                        }
+
+           
+
+                        var oListBinding = oModel.bindList("/Entity", undefined, undefined, [
+
+                            new sap.ui.model.Filter(sField, sap.ui.model.FilterOperator.EQ, sValue)
+
+                        ]);
+
+           
+
+                        oListBinding.requestContexts().then(function(aContexts) {
+
+                            if (aContexts && aContexts.length > 0) {
+
+                                oInput.setValueState("Error");
+
+                                oInput.setValueStateText("La valeur '" + sValue + "' pour '" + sField + "' existe déjà.");
+
+                                resolve(true); // True indicates a validation error
+
+                            } else {
+
+                                oInput.setValueState("None");
+
+                                resolve(false); // False indicates no validation error
+
+                            }
+
+                        }).catch(function(oError) {
+
+                            oInput.setValueState("Error");
+
+                            oInput.setValueStateText("Erreur lors de la vérification de la valeur.");
+
+                            resolve(true); // Treat fetching errors as validation errors
+
+                        });
+
+                    });
+
+                    aPromises.push(oPromise);
 
                 });
 
+           
 
+                return Promise.all(aPromises);
 
             },
+
+           
+
+            onCreate: function () {
+
+                var oView = this.getView(),
+
+                    aInputs = [oView.byId("EntityID"), oView.byId("EntityNamee")];
+
+           
+
+                this._validateInputs(aInputs).then((aValidationResults) => {
+
+                    var bValidationError = aValidationResults.some(result => result === true);
+
+           
+
+                    if (!bValidationError) {
+
+                        const oList = this._oTable;
+
+                        const oBinding = oList.getBinding("items");
+
+ 
+
+                        oBinding.create({
+
+                            "ID": this.byId("EntityID").getValue(),
+
+                            "name": this.byId("EntityNamee").getValue(),
+
+                        });
+
+                        MessageToast.show("The input is validated. Your Entity has been Created.");
+
+                    } else {
+
+                        MessageBox.alert("A validation error has occurred.Check your Id and your EntityName");
+
+                    }
+
+                }).catch((oError) => {
+
+                    MessageBox.alert("An error occurred during the validation process.");
+
+                });
+
+            },
+
+
             onOpenAddDialog: function () {
                 this.getView().byId("OpenDialog").open();
             },

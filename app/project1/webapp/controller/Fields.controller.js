@@ -387,12 +387,14 @@ sap.ui.define(
                 Model.setProperty("/layout", "OneColumn");
                 this.getOwnerComponent().getRouter().navTo("Listview");
             },
-            onCreate: function() {
+           onCreate: function () {
                 var oModel = this.getView().getModel("mainModel");
                 var input1 = this.getView().byId("sourceInput").getValue();
                 var input2 = this.getView().byId("targetInput").getValue();
                 var type = this.getView().byId("associationtype").getValue();
                 var sUrl1 = oModel.sServiceUrl + "/Entity";
+                var sUrl2 = oModel.sServiceUrl + "/Association";
+ 
                 var entity1 = {};
                 var entity2 = {};
                 if (oModel) {
@@ -404,28 +406,66 @@ sap.ui.define(
                             return response.json();
                         })
                         .then(entityData => {
-                            console.log("Entity Data:", entityData);
                             const entities = entityData.value;
                             entities.forEach(element => {
-                                console.log("aaaaaaaaaaaaaaaaaaaaaaa", element.name)
                                 if (element.name == input1) {
                                     entity1 = element;
                                 }
                                 if (element.name == input2) {
                                     entity2 = element;
                                 }
-                                
-                            } );
+ 
+                            });
+                           
                             // Vérifier si les entités source et cible sont identiques
                             if (entity1 === entity2) {
+                                console.log("traah",entity1.ID)
+                                console.log("traah",entity1)
                                 this.showSameEntityConfirmationPopup();
+                                
                             } else {
-                                var oBindList = oModel.bindList("/Association");
-                                oBindList.create({
-                                    entitySource: entity1,
-                                    entityTarget: entity2,
-                                    type: type
-                                });
+                                fetch(sUrl2)  // Ensure sUrl2 is correctly formatted to access the Association entity set
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        const associations = data.value; // Ensure the response structure matches this path
+                                        let associationExists = false;
+ 
+                                        // Check through all associations to see if there is a match with both entity1 and entity2
+                                        associations.forEach(element => {
+                                            console.log(element)
+                                         
+ 
+                                            if ((element.entitySource_ID === entity1.ID && element.entityTarget_ID === entity2.ID) ||
+                                            (element.entityTarget_ID === entity1 && element.entitySource_ID === entity2)) {
+                                            associationExists = true;
+                                        }
+                                           
+           
+                                        });
+ 
+                                        if (associationExists) {
+                                            console.log("Association already exists between the entities.");
+                                        } else {
+                                            console.log("No existing association found. Ready to create a new one.");
+                                            var oBindList = oModel.bindList("/Association");
+                                            oBindList.create({
+                                                entitySource: entity1,
+                                                entityTarget: entity2,
+                                                type: type
+                                            });
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", error);
+                                    });
+ 
+ 
+ 
                             }
                         })
                         .catch(error => {
