@@ -38,6 +38,7 @@ module.exports = cds.service.impl((srv) => {
             return { success: false };
         }
     });
+   
 
     srv.on('ExecuteCommand', async (req) => {
         const { command } = req.data;
@@ -50,6 +51,23 @@ module.exports = cds.service.impl((srv) => {
         } catch (error) {
             console.error('Error executing command:', error);
             return error;
+        }
+    });
+    srv.on('appendUIToFile', async (req) => {
+        try {
+            // Read the value of "content" from the request body
+            const data = req.data.content;
+
+            const filePath = '/home/user/projects/clientproject/bb.js';
+            
+            // Write the value of "content" to the file
+            await fs.promises.writeFile(filePath, data + '\n');
+
+            console.log('Data written to file successfully.');
+            return { success: true };
+        } catch (error) {
+            console.error('Error writing data to file:', error);
+            return { success: false };
         }
     });
 });

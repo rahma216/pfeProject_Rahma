@@ -390,6 +390,13 @@
                     type="Accept"
                     icon="sap-icon://sap-ui5"
                 />
+                 <Button
+                    id="uii"
+                    text="tttttttttt"
+                    press="UIgen"
+                    type="Accept"
+                    icon="sap-icon://sap-ui5"
+                />
 
 			
 					<Button
