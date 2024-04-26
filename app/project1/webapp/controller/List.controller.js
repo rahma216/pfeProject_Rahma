@@ -134,6 +134,10 @@ sap.ui.define([
                             "name": this.byId("EntityNamee").getValue(),
 
                         });
+                        aInputs.forEach((oInput) => { 
+                            oInput.setValue("")
+                        });
+                        
 
                         MessageToast.show("The input is validated. Your Entity has been Created.");
 

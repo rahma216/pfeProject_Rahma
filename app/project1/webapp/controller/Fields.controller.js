@@ -178,6 +178,16 @@ sap.ui.define(
 
 
                                     });
+                                    var oView = this.getView(),
+
+                                    aInputs = [oView.byId("fieldid"), oView.byId("field"),oView.byId("idComboBoxSuccess"),,oView.byId("key")];
+                                    aInputs.forEach((oInput) => { 
+                                        oInput.setValue("")
+                                    });
+                                    var oMultiComboBox = this.getView().byId("annotations");
+                                    oMultiComboBox.setSelectedKeys([]);
+
+
 
 
                                     /* 
@@ -419,8 +429,12 @@ sap.ui.define(
                            
                             // Vérifier si les entités source et cible sont identiques
                             if (entity1 === entity2) {
-                                console.log("traah",entity1.ID)
-                                console.log("traah",entity1)
+                                var oView = this.getView(),
+
+                                aInputs = [oView.byId("targetInput"), oView.byId("associationtype")];
+                                            aInputs.forEach((oInput) => { 
+                                                oInput.setValue("")
+                                            });
                                 this.showSameEntityConfirmationPopup();
                                 
                             } else {
@@ -450,6 +464,10 @@ sap.ui.define(
  
                                         if (associationExists) {
                                             console.log("Association already exists between the entities.");
+                                            aInputs = [oView.byId("targetInput"), oView.byId("associationtype")];
+                                            aInputs.forEach((oInput) => { 
+                                                oInput.setValue("")
+                                            });
                                         } else {
                                             console.log("No existing association found. Ready to create a new one.");
                                             var oBindList = oModel.bindList("/Association");
@@ -458,10 +476,17 @@ sap.ui.define(
                                                 entityTarget: entity2,
                                                 type: type
                                             });
+                                            var oView = this.getView(),
+
+                                            aInputs = [oView.byId("targetInput"), oView.byId("associationtype")];
+                                            aInputs.forEach((oInput) => { 
+                                                oInput.setValue("")
+                                            });
+
                                         }
                                     })
                                     .catch(error => {
-                                        console.error("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", error);
+                                        console.error(error);
                                     });
  
  

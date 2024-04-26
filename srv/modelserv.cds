@@ -12,7 +12,7 @@ service modelsService{
     action appendTextToFile(content: String) returns { success: Boolean };
     action ExecuteCommand (command: String);
     action appendServiceToFile(content: String) returns { success: Boolean };
-     action appendUIToFile(content: String) returns { success: Boolean };
+     action appendUIToFile(content: String,path:String) returns { success: Boolean };
 
 
 
