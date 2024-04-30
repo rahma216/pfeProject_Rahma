@@ -1,58 +1,61 @@
 {
-    "name": "App_Generator",
-    "version": "1.0.0",
-    "description": "A simple CAP project.",
-    "repository": "<Add your repository here>",
-    "license": "UNLICENSED",
-    "private": true,
-    "dependencies": {
-        "@sap/cds": "^7.7.2",
-        "@sap/cds-hana": "^2",
-        "@sap/cds-rest": "^1.6.3",
-        "@sap/generator-cap-project": "^1.7.9",
-        "@sap/xssec": "^3",
-        "child_process": "^1.0.2",
-        "expect": "^29.7.0",
-        "express": "^4"
-    },
-    "devDependencies": {
-        "@cap-js/sqlite": "^1",
-        "@sap/cds-dk": "^7",
-        "@sap/ux-specification": "^1.120.8",
-        "rimraf": "^3.0.2"
-    },
-    "scripts": {
-        "start": "cds-serve",
-        "watch-app_generator": "cds watch --open app_generator/webapp/index.html?sap-ui-xx-viewCache=false",
-        "undeploy": "cf undeploy App_Generator --delete-services --delete-service-keys --delete-service-brokers",
-        "build": "rimraf resources mta_archives && mbt build --mtar archive",
-        "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-        "watch-project1": "cds watch --open project1/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-project2": "cds watch --open project2/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-project3": "cds watch --open project3/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-project4": "cds watch --open project4/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-projectrahma": "cds watch --open projectrahma/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-projecttest": "cds watch --open projecttest/webapp/index.html?sap-ui-xx-viewCache=false"
-    },
-    "cds": {
-        "requires": {
-            "auth": "mocked"
-        }
-    },
-    "sapux": [
-        "app/project2",
-        "app/project2",
-        "app/project2",
-        "app/project2",
-        "app/project2",
-        "app/project3",
-        "app/project4",
-        "app/project3",
-        "app/project3",
-        "app/project4",
-        "app/project3",
-        "app/projectrahma",
-        "app/projecttest",
-        "app/project8"
-    ]
+  "name": "App_Generator",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^7.7.2",
+    "@sap/cds-hana": "^2",
+    "@sap/cds-rest": "^1.6.3",
+    "@sap/generator-cap-project": "^1.7.9",
+    "@sap/xssec": "^3",
+    "child_process": "^1.0.2",
+    "expect": "^29.7.0",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^7",
+    "@sap/ux-specification": "^1.120.8",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-app_generator": "cds watch --open app_generator/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy App_Generator --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-project1": "cds watch --open project1/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-project2": "cds watch --open project2/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-project3": "cds watch --open project3/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-project4": "cds watch --open project4/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-projectrahma": "cds watch --open projectrahma/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-projecttest": "cds watch --open projecttest/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "cds": {
+    "requires": {
+      "auth": "mocked",
+      "[production]": {
+        "db": "hana"
+      }
+    }
+  },
+  "sapux": [
+    "app/project2",
+    "app/project2",
+    "app/project2",
+    "app/project2",
+    "app/project2",
+    "app/project3",
+    "app/project4",
+    "app/project3",
+    "app/project3",
+    "app/project4",
+    "app/project3",
+    "app/projectrahma",
+    "app/projecttest",
+    "app/project8"
+  ]
 }

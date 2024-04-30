@@ -1,0 +1,157 @@
+<mvc:View controllerName="appgenerator.controller.Generator"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content />
+        <Panel
+                headerText="Create Your Custom Application "
+                expandable="true"
+                expanded="true"
+            >
+                <content>
+                    <VBox
+                        width="100%"
+                        id="input"
+                        class=""
+                    >
+                        <Toolbar>
+                            <content>
+                                <ToolbarSpacer />
+                                <Button
+                                    icon="sap-icon://create"
+                                    text="Create Entity"
+                                />
+                            </content>
+                        </Toolbar>
+
+                        <VBox
+                            width="100%"
+                            id="Entities"
+                            class="section"
+                        >
+                        
+                              
+                                    <Label
+                                        text="Create your Own Entities"
+                                        design="Bold"
+                                    />
+                                
+                                    <Input
+                                        value=""
+                                        name="EntityName"
+                                 
+                                        class="  tag-attribute  tag-value"
+                                        placeholder="EntityName"
+                                    />
+                        
+
+                                    <Label
+                                        text="Customize Entity's Properties:"
+                                        design="Bold"
+                                    />
+
+                                   
+                                 
+                                    
+                                    <VBox
+                                     width="100%"
+                        id="id"
+                        class=""
+                                    >
+                                        <Input
+                                            value=""
+                                            class=" tag-attribute  tag-value"
+                                            name="FieldName"
+                                            placeholder="PropertyName"
+                                            id="PropertyName"
+                                        />
+                                        <Select
+                                                class="  tag-attribute"
+                                                name="Type"
+                                            />
+
+                                            <Select
+                                                class="  tag-attribute"
+                                                name="Annotations"
+                                            />
+                                                 <Button
+                                            icon="sap-icon://add"
+                                            text="Add Property"
+                                            press="onAddPress"
+                                            id="addprop"
+                                        />
+                                         <Button
+                                            icon="sap-icon://delete"
+                                            text="Delete Property"
+                                            press="onRemoveTagPress"
+                                        />
+                                        
+                                         
+                                        
+                                            </VBox>
+                                             <Toolbar>
+                                    <content>
+                                        <Button
+                                            icon="sap-icon://add"
+                                            text="Add Entity"
+                                            press="onAddGroupPress"
+                                        />
+                                        <Button
+                                            icon="sap-icon://delete"
+                                            text="Delete Entity"
+                                            press="onRemoveGroupPress"
+                                        />
+                                    </content>
+                                </Toolbar>
+                                    
+                                 
+                              
+                              
+                            </VBox>
+                             
+                        </VBox>
+
+                        
+                        
+                   
+                </content>
+            
+           
+            <TextArea
+                id="outputTextArea"
+                rows="5"
+                width="50%"
+                editable="false"
+                valueState="Information"
+                visible="false"
+                growing="true"
+            />
+            <TextArea
+                id="outputCDS"
+                rows="5"
+                width="100%"
+                editable="false"
+                valueState="Information"
+                visible="true"
+                growing="true"
+            />
+            <Toolbar>
+                <content>
+                    <Button
+                        icon="sap-icon://save"
+                        text="Save File"
+                        press="onSaveFilePress"
+                    />
+                    <Button
+                        icon="sap-icon://reset"
+                        id="reset"
+                        text="Reset"
+                        press="onResetInputsPress"
+                    />
+                </content>
+            </Toolbar>
+
+            </Panel>
+
+    </Page>
+</mvc:View>
