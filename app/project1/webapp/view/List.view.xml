@@ -54,13 +54,15 @@
                     </form:SimpleForm>
 
                     <Table
-                        items="{path: 'mainModel>/Entity',
+                        items="{path: 'mainModel>/Entity'
+                        ,
                          parameters: {
                                             $expand: 'fields' 
                                         },
                             sorter: {
                                 path: 'name'
-                            }}"
+                            }
+                            }"
                         id="table0"
                         mode="SingleSelectLeft"
                         selectionChange="onSelect"
@@ -97,7 +99,7 @@
                                         id="deleteButton"
                                         icon="sap-icon://delete"
                                         tooltip="Delete"
-                                        visible="false"
+                                        visible="true"
                                         press="onDelete"
                                     >
                                         <layoutData>
@@ -115,19 +117,7 @@
                                         enabled="true"
                                         press="onSave"
                                     />
-                                    <Button
-                                        id="editModeButton"
-                                        visible="true"
-                                        icon="sap-icon://edit"
-                                        tooltip="Edit"
-                                        press="onEditMode"
-                                    >
-                                        <layoutData>
-                                            <OverflowToolbarLayoutData
-                                                priority="NeverOverflow"
-                                            />
-                                        </layoutData>
-                                    </Button>
+                                 
                                 </content>
                                 <dependents>
                                     <Dialog

@@ -57,12 +57,14 @@ module.exports = cds.service.impl((srv) => {
         try {
             // Read the value of "content" from the request body
             const data = req.data.content;
-
-            const filePath = '/home/user/projects/clientproject/app/project1/annotations.cds';
-            
+ 
+            //const filePath = '/home/user/projects/clientproject/app/project1/annotations.cds';
+            const filePath = req.data.path ;
+ 
+           
             // Write the value of "content" to the file
             await fs.promises.writeFile(filePath, data + '\n');
-
+ 
             console.log('Data written to file successfully.');
             return { success: true };
         } catch (error) {

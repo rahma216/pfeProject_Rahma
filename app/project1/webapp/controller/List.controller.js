@@ -1,3 +1,4 @@
+
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
@@ -6,6 +7,7 @@ sap.ui.define([
     "sap/ui/model/FilterOperator",
 
 ],
+
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
@@ -15,10 +17,7 @@ sap.ui.define([
         return Controller.extend("app.project1.controller.List", {
             onInit: function () {
                 this._oTable = this.byId("table0");
-                /*  var oDetailModel = new sap.ui.model.json.JSONModel();
-                 this.getView().setModel(oDetailModel, "detailModel");
-                */
-
+             
 
             },
             _validateInputs: function(aInputs) {
@@ -168,10 +167,10 @@ sap.ui.define([
 
                 var oSelected = this.byId("table0").getSelectedItem();
                 if (oSelected) {
-                    var oSalesOrder = oSelected.getBindingContext("mainModel").getObject().soNumber;
+                    var o = oSelected.getBindingContext("mainModel").getObject().name;
 
                     oSelected.getBindingContext("mainModel").delete("$auto").then(function () {
-                        MessageToast.show(oSalesOrder + " SuccessFully Deleted");
+                        MessageToast.show(o + " SuccessFully Deleted");
                     }.bind(this), function (oError) {
                         MessageToast.show("Deletion Error: ", oError);
                     });
@@ -185,31 +184,15 @@ sap.ui.define([
                 //var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 var oSelectedContext = oItem.getBindingContext("mainModel");
                 var selectedObj = oSelectedContext.getObject();
-                /// var oSelectedEntity = oSelectedContext.getProperty("name");
-                /// var oSelectedEntityid = oSelectedContext.getProperty("ID"); 
-                // Passer les données de l'entité sélectionnée à la deuxième vue et afficher cette vue
-                // var oDetailView = this.getView().getParent().getParent().getMidColumnPages()[0];
-                /*  oDetailView.setModel(new sap.ui.model.json.JSONModel(oSelectedEntity), "selectedEntityModel");
-                 this.getView().getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsMidExpanded); */
                 var oModel = this.getOwnerComponent().getModel("detailModel");
                 oModel.setData(selectedObj);
-                /// oModel.setProperty("/name", oSelectedEntity);
-                /// oModel.setProperty("/id", oSelectedEntityid);
-
-
-
-
-
+             
+     
                 this.getOwnerComponent().getRouter().navTo("Details", {
                     index: selectedObj.ID
                 });
                 var Model = this.getOwnerComponent().getModel("localModel");
                 Model.setProperty("/layout", "TwoColumnsMidExpanded");
-
-
-
-
-
 
             },
 

@@ -121,8 +121,7 @@ sap.ui.define(
                  var bShowTable = oViewModel.getProperty("/showTable");
                  oViewModel.setProperty("/showTable", !bShowTable);
                 */
-                 console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbb",this.getView().byId("annotations").mProperties.
-                 selectedKeys)
+             
                  var array= this.getView().byId("annotations").mProperties.selectedKeys ; 
                  var annotations = array.join(" ");
                  console.log("a7la annotation",annotations)
