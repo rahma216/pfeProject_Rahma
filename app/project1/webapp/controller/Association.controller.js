@@ -40,20 +40,26 @@ sap.ui.define([
 
       this.base = this.getOwnerComponent();
 
-      var increment = 0;
       // Assurez-vous que this.base et this.base.getEditFlow sont définis
       if (!this.base || !this.base.getEditFlow) {
         console.error("Base or getEditFlow is undefined.");
       }
-      this.initData();
+      this.initData()
+      this.getView().attachBrowserEvent("click", function(oEvent) {
+        this.initData();
+      }, this);
       this.attachDragAndDrop();
 
     },
 
     initData: function () {
       var oModel = this.getOwnerComponent().getModel("mainModel");
+      var oModel1 = this.getOwnerComponent().getModel("detailModel");
+       console.log("aaaaaaaaaaaaaaaaaaaaaaa",oModel1.getData())
+
 
       var oJSONModel = new sap.ui.model.json.JSONModel();
+
       oJSONModel.setData({
         "id": "",
         "name": ""
@@ -62,9 +68,9 @@ sap.ui.define([
 
 
 
-      console.log(oModel)
 
       var sUrl1 = oModel.sServiceUrl + "/Entity";
+
 
       if (oModel) {
         console.log("Main model found");
@@ -80,13 +86,17 @@ sap.ui.define([
           .then(data => {
             // Create a JSON model containing the fetched data
             var oODataJSONModel = new sap.ui.model.json.JSONModel();
+
+
             oODataJSONModel.setData(data.value);
 
             console.log("patron", oODataJSONModel);
+           this.byId("list1").setModel(oODataJSONModel);
+
 
             // Set the JSON model on the controls
-            this.byId("list1").setModel(oODataJSONModel);
-            console.log("aaaaaaaaaa", oODataJSONModel);
+            
+            console.log("aaaaaaaaaajsonnnnnnnn", oODataJSONModel.getData());
 
           })
           .catch(error => {
@@ -371,7 +381,7 @@ sap.ui.define([
         const entityName = entity.name;
         const entityFields = fieldsData.filter(field => field.fld_ID === entity.ID);
 
-        let cdsEntity = `entity ${entityName} {`;
+        let cdsEntity = `entity ${entityName} {`+"\n\tkey ID : UUID;";
 
         // Process fields
         for (const field of entityFields) {
@@ -407,17 +417,19 @@ sap.ui.define([
           if (isManyToOne && isSourceEntity) {
             const targetEntity = entityData.find(e => e.ID === association.entityTarget_ID);
             if (targetEntity) {
-              cdsEntity += `\n\tfld : Association to ${targetEntity.name};`;
+
+              cdsEntity += `\n\t${targetEntity.name}_fld : Association to ${targetEntity.name};`;
             }
           }
 
           if (isManyToOne && isTargetEntity) {
             const sourceEntity = entityData.find(e => e.ID === association.entitySource_ID);
+            const targetEntity = entityData.find(e => e.ID === association.entityTarget_ID);
             if (sourceEntity) {
               const lowersourceEntity = sourceEntity.name.toLowerCase();
               cdsEntity += `\n\t${lowersourceEntity} : Association to many ${sourceEntity.name}`;
 
-              cdsEntity += `\ton ${lowersourceEntity}.fld = $self;`;
+              cdsEntity += `\ton ${lowersourceEntity}.${targetEntity.name}_fld = $self;`;
             }
           }
           if (isOneToOne && isSourceEntity) {
@@ -627,10 +639,10 @@ sap.ui.define([
     }
     ,
     onAppendUIToFilePress: function (data) {
-      var path="/home/user/projects/clientproject/app/"
+      var path="/home/user/projects/pfe/clientproject/app/"
       var projectname=this.getView().byId("projectname").getValue().toLowerCase(); 
       var fullpath=path+projectname+"/annotations.cds"
-      console.log("aaaa",fullpath)
+      console.log("aaaa",fullpath)                
       fetch("/odata/v4/models/appendUIToFile", {
         method: "POST",
         headers: {
@@ -847,9 +859,9 @@ sap.ui.define([
        var apptitle =oView.byId("apptitle").getValue().toLowerCase();
        var namespace =oView.byId("namespace").getValue().toLowerCase();
        var appdesc =oView.byId("appdesc").getValue().toLowerCase();
-       var Yocommand = "/home/user/projects/clientproject/yoListreport.sh " + Nameproj + " " + apptitle + " " + namespace + " " + appdesc;
+       var Yocommand = " /home/user/projects/pfe/clientproject/yoListreport.sh " + Nameproj + " " + apptitle + " " + namespace + " " + appdesc;
 
-       fetch("/odata/v4/models/ExecuteCommand", {
+       fetch("/odata/v4/models/ExecuteCommand", {  
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -878,7 +890,7 @@ sap.ui.define([
        var apptitle =oView.byId("customtitle").getValue().toLowerCase();
        var namespace =oView.byId("customnamespace").getValue().toLowerCase();
        var appdesc =oView.byId("customappdesc").getValue().toLowerCase();
-       var Yocommand = "/home/user/projects/clientproject/customtemp.sh " + Nameproj + " " + apptitle + " " + namespace + " " + appdesc;
+       var Yocommand = "/home/user/projects/pfe/clientproject/customtemp.sh " + Nameproj + " " + apptitle + " " + namespace + " " + appdesc;
        var aInputs = [oView.byId("custompage"), oView.byId("customtitle"),oView.byId("customnamespace"),oView.byId("customappdesc")];
 
 
@@ -913,7 +925,7 @@ sap.ui.define([
        var apptitle =oView.byId("basicapptitle").getValue().toLowerCase();
        var namespace =oView.byId("basicnamespace").getValue().toLowerCase();
        var appdesc =oView.byId("basicappdesc").getValue().toLowerCase();
-       var Yocommand = "/home/user/projects/clientproject/basictemp.sh " + Viewname+" "+ Nameproj + " " + apptitle + " " + namespace + " " + appdesc;
+       var Yocommand = "/home/user/projects/pfe/clientproject/basictemp.sh " + Viewname+" "+ Nameproj + " " + apptitle + " " + namespace + " " + appdesc;
        var aInputs = [oView.byId("viewname"), oView.byId("basicname"),oView.byId("basicapptitle"),oView.byId("basicnamespace"),oView.byId("basicappdesc")];
 
 

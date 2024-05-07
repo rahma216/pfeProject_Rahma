@@ -110,6 +110,8 @@ sap.ui.define([
                 var oView = this.getView(),
 
                     aInputs = [oView.byId("EntityID"), oView.byId("EntityNamee")];
+                    var oModel1 = this.getOwnerComponent().getModel("detailModel");
+
 
            
 
@@ -136,6 +138,29 @@ sap.ui.define([
                         });
                         aInputs.forEach((oInput) => { 
                             oInput.setValue("")
+                        });
+                        var oModel = this.getOwnerComponent().getModel("mainModel");
+                        var sUrl1 = oModel.sServiceUrl + "/Entity";
+                        fetch(sUrl1)
+                        .then(response => {
+                          if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                          }
+                          return response.json();
+                        })
+                        .then(data => {
+                          // Create a JSON model containing the fetched data
+              
+                          oModel1.setData(data.value);
+              
+                          console.log("patronnnnnnnnnnnnnnnnnnnnnnnnnnns", oModel1.getData());
+              
+                          // Set the JSON model on the controls
+              
+                        })
+                        .catch(error => {
+                          // Handle errors in fetching data
+                          console.error('Error fetching data:', error);
                         });
                         
 
@@ -166,7 +191,7 @@ sap.ui.define([
                 this.byId("editModeButton").setVisible(false);
                 this.byId("saveButton").setVisible(true);
                 this.byId("deleteButton").setVisible(true);
-                this.rebindTable(this.oEditableTemplate, "Edit");
+               // this.rebindTable(this.oEditableTemplate, "Edit");
             },
             onDelete: function () {
 

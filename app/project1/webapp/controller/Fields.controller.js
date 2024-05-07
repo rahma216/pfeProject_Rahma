@@ -19,9 +19,16 @@ sap.ui.define(
                 var actions = {
                     "Actions": [
                         { key: 0, type: "String" },
-                        { key: 1, type: "int" },
-                        { key: 2, type: "boolean" },
-                        { key: 3, type: "float" }
+                        { key: 1, type: "Int32" },
+                        { key: 1, type: "Int16" },
+                        { key: 1, type: "UInt8" },
+                        { key: 1, type: "Integer" },
+                        { key: 0, type: "Double" },
+                        { key: 1, type: "Decimal" },
+                        { key: 1, type: "DateTime" },
+                        { key: 1, type: "Date" },
+                        { key: 1, type: "Integer" },
+                        { key: 2, type: "Boolean" },
                     ]
                 };
                 var annotations = {
@@ -29,7 +36,6 @@ sap.ui.define(
                         { key: 0, name: "@readonly" },
                         { key: 1, name: "@mandatory" },
                         { key: 2, name: "@assert.unique" },
-                        { key: 3, name: "@assert.integrity" },
                         { key: 3, name: "@assert.integrity" },
                         { key: 3, name: "@assert.notNull" }
 

@@ -37,25 +37,17 @@
   "cds": {
     "requires": {
       "auth": "mocked",
+      "db": {
+        "kind": "sqlite",
+        "credentials": { "url": "db.sqlite" },
+        "schema_evolution": "auto"
+     },
       "[production]": {
         "db": "hana"
       }
     }
   },
   "sapux": [
-    "app/project2",
-    "app/project2",
-    "app/project2",
-    "app/project2",
-    "app/project2",
-    "app/project3",
-    "app/project4",
-    "app/project3",
-    "app/project3",
-    "app/project4",
-    "app/project3",
-    "app/projectrahma",
-    "app/projecttest",
-    "app/project8"
+  
   ]
 }

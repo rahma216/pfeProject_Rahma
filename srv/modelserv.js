@@ -9,7 +9,7 @@ module.exports = cds.service.impl((srv) => {
             const data = req.data.content;
 
             // Provide the correct file path
-            const filePath = '/home/user/projects/clientproject/db/models.cds';
+            const filePath = '/home/user/projects/pfe/clientproject/db/models.cds';
        
             // Write the value of "content" to the file
             await fs.promises.writeFile(filePath, data + '\n');
@@ -26,7 +26,7 @@ module.exports = cds.service.impl((srv) => {
             const data = req.data.content;
 
             // Provide the correct file path
-            const filePath = '/home/user/projects/clientproject/srv/services.cds';
+            const filePath = '/home/user/projects/pfe/clientproject/srv/services.cds';
             
             // Write the value of "content" to the file
             await fs.promises.writeFile(filePath, data + '\n');

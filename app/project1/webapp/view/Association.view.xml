@@ -403,7 +403,7 @@
                 <Button
                     id="aa"
                     text="GenenrateService"
-                    press="generateCDSModel"
+                    press="generateService"
                     type="Accept"
                     icon="sap-icon://write-new-document"
                 />
