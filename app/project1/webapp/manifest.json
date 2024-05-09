@@ -37,6 +37,16 @@
       {
         "uri": "localSource/Annotations.json",
         "type": "JSON"
+      },
+      "associationModel":
+      {
+        "uri": "localSource/associationModel.json",
+        "type": "JSON"
+      },
+      "serviceModel":
+      {
+        "uri": "localSource/serviceModel.json",
+        "type": "JSON"
       }
     }
   },
@@ -104,6 +114,16 @@
         "type": "sap.ui.model.json.JSONModel",
         "settings": {},
         "dataSource": "detailsData"
+      },
+      "associationModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {},
+        "dataSource": "associationModel"
+      },
+      "serviceModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {},
+        "dataSource": "serviceModel"
       }
      
     },

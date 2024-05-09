@@ -29,8 +29,8 @@
 				headerText="Entities"
 				class="sapUiSmallMargin"
 				width="200px"
-				items="{path: '/' }">
-					<StandardListItem title="{name}" description="{ID}" info="created" iconInset="false"  infoState="Success" icon="sap-icon://hr-approval" 	infoStateInverted="true" />
+				items="{path: 'serviceModel>/value' }">
+					<StandardListItem title="{serviceModel>name}" description="{serviceModel>ID}" info="created" iconInset="false"  infoState="Success" icon="sap-icon://hr-approval" 	infoStateInverted="true" />
 			</List>
 
 				
@@ -230,7 +230,7 @@
                                 <Label text="Application Description" />
                                 <Input value="" id="appdesc" required="true" />
                                 <Label text="Main Entity" />
-                               <Select id="choice1" items="{rahmaModel>/Entity}" change=".onSelectChange" required="true">
+                               <Select id="choice1" items="{rahmaModel>/Entity}" change=".onSelectChange" required="true" selectedItem="">
     <core:Item key="{rahmaModel>name}" text="{rahmaModel>name}" />
 </Select>
 

@@ -76,6 +76,17 @@ sap.ui.define(
                     path: "/Entity/" + this.index,
                     model: "mainModel"
                 });
+                
+                var Model = this.getOwnerComponent().getModel("associationModel");
+
+                this.getView().setModel(Model, "associationsModel");
+    
+                // Vous pouvez également ici rafraîchir le binding du tableau si nécessaire
+                this.getView().byId("associationsTable").setModel(Model);
+
+                this.onFilterAssociations(this.index) ; 
+
+
             },
 
             onEditToggleButtonPress: function () {
@@ -112,6 +123,44 @@ sap.ui.define(
             onCancelDialog: function (oEvent) {
                 oEvent.getSource().getParent().close();
             },
+            onFilterAssociations: function(ID) {
+                
+                var oTable = this.getView().byId("associationsTable");
+                var oBinding = oTable.getBinding("items");
+            
+                if (ID) {
+                    var oFilterSource = new sap.ui.model.Filter("entitySource_ID", sap.ui.model.FilterOperator.EQ, ID);
+                    var oFilterTarget = new sap.ui.model.Filter("entityTarget_ID", sap.ui.model.FilterOperator.EQ, ID);
+                    var oCombinedFilter = new sap.ui.model.Filter({
+                        filters: [oFilterSource, oFilterTarget],
+                        and: false
+                    });
+            
+                    oBinding.filter(oCombinedFilter);
+                } else {
+                    // Si aucun ID n'est fourni, enlever les filtres pour afficher toutes les associations
+                    oBinding.filter([]);
+                }
+            },
+            
+            onFetchAssociations: function() { 
+                if (this.getView().byId("associationsTable").getVisible()==true)
+                {
+                    this.getView().byId("associationsTable").setVisible(false);
+                }
+                else {
+                    this.getView().byId("associationsTable").setVisible(true);
+
+                }
+               
+             
+
+                   
+                   
+                   
+                    
+            },
+            
 
 
 
@@ -384,8 +433,30 @@ sap.ui.define(
                 }
 
             },
-           
-
+            onDeleteAssociation: function() {
+                var oTable = this.byId("associationsTable");
+                var oSelectedItem = oTable.getSelectedItem();
+            
+                if (oSelectedItem) {
+                    // Assuming 'Association' is a navigation property from the entity
+                    var oContext = oSelectedItem.getBindingContext("mainModel");
+                    var oAssociation = oSelectedItem.getBindingContext("mainModel").getObject().soNumber;
+                    
+                    // OData V4: Use the delete method on the context of the selected item
+                    oContext.delete().then(function() {
+                        sap.m.MessageToast.show(oAssociation + " Successfully Deleted");
+                        // Refresh the table or specific binding if necessary
+                        oTable.getBinding("items").refresh();
+                    }).catch(function(oError) {
+                        sap.m.MessageToast.show("Deletion Error: " + oError.message);
+                    });
+                } else {
+                    sap.m.MessageToast.show("Please Select a Row to Delete");
+                }
+            }
+            
+            
+,            
             onOpenAddDialog2: function () {
                 this.getView().byId("OpenDialog2").open();
 
@@ -397,6 +468,42 @@ sap.ui.define(
                     return '';
                 }
             },
+            Bindtable: function() {
+                var oView = this.getView();
+                var oModel = oView.getModel("mainModel");
+                var sUrl = oModel.sServiceUrl + "/Association";
+            
+                fetch(sUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        var oJSONModel = new sap.ui.model.json.JSONModel();
+                        oJSONModel.setData(data);
+                        oView.setModel(oJSONModel, "associationsModel");
+            
+                        // Attachez maintenant le modèle à un tableau dans la vue
+                        var oTable = oView.byId("associationsTable");
+                        oTable.setModel(oJSONModel);
+                        oTable.bindItems({
+                            path: "/value",
+                            template: new sap.m.ColumnListItem({
+                                cells: [
+                                    new sap.m.ObjectIdentifier({ title: "{entitySource_ID}" }),
+                                    new sap.m.ObjectIdentifier({ title: "{entityTarget_ID}" }),
+                                    new sap.m.Text({ text: "{type}" })
+                                ]
+                            })
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Failed to fetch associations:", error);
+                    });
+            },
+            
 
             handleClose: function () {
                 var Model = this.getOwnerComponent().getModel("localModel");
@@ -454,6 +561,7 @@ sap.ui.define(
                                     .then(data => {
                                         const associations = data.value; // Ensure the response structure matches this path
                                         let associationExists = false;
+
  
                                         // Check through all associations to see if there is a match with both entity1 and entity2
                                         associations.forEach(element => {
@@ -482,6 +590,7 @@ sap.ui.define(
                                                 entityTarget: entity2,
                                                 type: type
                                             });
+                                            
                                             var oView = this.getView(),
 
                                             aInputs = [oView.byId("targetInput"), oView.byId("associationtype")];

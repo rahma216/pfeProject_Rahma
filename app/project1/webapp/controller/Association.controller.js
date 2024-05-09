@@ -45,9 +45,9 @@ sap.ui.define([
         console.error("Base or getEditFlow is undefined.");
       }
       this.initData()
-      this.getView().attachBrowserEvent("click", function(oEvent) {
+    /*   this.getView().attachBrowserEvent("click", function(oEvent) {
         this.initData();
-      }, this);
+      }, this); */
       this.attachDragAndDrop();
 
     },
@@ -381,7 +381,7 @@ sap.ui.define([
         const entityName = entity.name;
         const entityFields = fieldsData.filter(field => field.fld_ID === entity.ID);
 
-        let cdsEntity = `entity ${entityName} {`+"\n\tkey ID : UUID;";
+        let cdsEntity = `entity ${entityName} {`;
 
         // Process fields
         for (const field of entityFields) {
@@ -417,19 +417,17 @@ sap.ui.define([
           if (isManyToOne && isSourceEntity) {
             const targetEntity = entityData.find(e => e.ID === association.entityTarget_ID);
             if (targetEntity) {
-
-              cdsEntity += `\n\t${targetEntity.name}_fld : Association to ${targetEntity.name};`;
+              cdsEntity += `\n\tfld : Association to ${targetEntity.name};`;
             }
           }
 
           if (isManyToOne && isTargetEntity) {
             const sourceEntity = entityData.find(e => e.ID === association.entitySource_ID);
-            const targetEntity = entityData.find(e => e.ID === association.entityTarget_ID);
             if (sourceEntity) {
               const lowersourceEntity = sourceEntity.name.toLowerCase();
               cdsEntity += `\n\t${lowersourceEntity} : Association to many ${sourceEntity.name}`;
 
-              cdsEntity += `\ton ${lowersourceEntity}.${targetEntity.name}_fld = $self;`;
+              cdsEntity += `\ton ${lowersourceEntity}.fld = $self;`;
             }
           }
           if (isOneToOne && isSourceEntity) {
@@ -699,118 +697,77 @@ sap.ui.define([
 
     //////////////////////////////////////////////////// UI
     onOpenAddDialog: function () {
-      var oDialog = this.getView().byId("mainDialog").open();
-      var oModela = new sap.ui.model.json.JSONModel();
-
-
-      // Access the array from your table
-      var aTableData = this.table;
-      console.log("table1", this.table)
-      var entity1 = {}
       var oModel = this.getView().getModel("mainModel");
+      var oDialog = this.getView().byId("mainDialog");
+      oDialog.open();
+      var oModela = new sap.ui.model.json.JSONModel();
+    
+      console.log(this.table);
       var sUrl1 = oModel.sServiceUrl + "/Entity";
       var sUrl2 = oModel.sServiceUrl + "/Association";
-      var tab=[] ; 
-      var aEntityData = {};
     
-
-
-
-
-
-      aTableData.forEach(function (item, index) {
-        if (oModel) {
-          fetch(sUrl1)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
+      var table4 = [];
+      if (oModel) {
+        fetch(sUrl1)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(entityData => {
+            const entities = entityData.value;
+            var table3 = [];
+            this.table.forEach(tableItem => {
+              var matchingEntity = entities.find(entity => entity.name === tableItem);
+              if (matchingEntity) {
+                table3.push(matchingEntity);
               }
-              return response.json();
-            })
-            .then(entityData => {
-              const entities = entityData.value;
-              entities.forEach(element0 => {
-                if (element0.name == item) {
-                  entity1 = element0;
-             }
-              });
-
-
-             
-
-
-            })
-            .catch(error => {
-              console.error("Error retrieving entities:", error);
             });
-        } else {
-          console.error("Model 'mainModel' is not defined or accessible in the view.");
-        }
-        fetch(sUrl2)  // Ensure sUrl2 is correctly formatted to access the Association entity set
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error('Network response was not ok');
+            
+            console.log("table3", table3);
+            fetch(sUrl2) // Ensure sUrl2 is correctly formatted to access the Association entity set
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              })
+              .then(data => {
+                const associations = data.value;
+                associations.forEach(element => {
+                  table3.forEach(t => {
+                    console.log("Association ID:", element.entityTarget_ID);
+                    console.log("Entity ID:", t.ID);
+                    if (element.entityTarget_ID == t.ID && element.type=="ManyToOne") {
+                      console.log("Match found. Adding association:", element.name);
+                      table4.push(t.name);
                     }
-                    return response.json();
-                  })
-                  .then(data => {
-                    const associations = data.value; // Ensure the response structure matches this path
-                    let associationExists = false;
-  
-                    // Check through all associations to see if there is a match with both entity1 and entity2
-                    associations.forEach(element => {
-  
-  
-                      if ((element.entityTarget_ID === entity1.ID && element.type === "ManyToOne") ) {
-                        associationExists = true;
-                        tab.push(entity1.name) ; 
-                        aEntityData['name'] =entity1.name ;
-                        console.log("sssssssssssssssssssssss",tab)
-                        console.log("tabledataaaaaaaa",aTableData)
-                        
-  
-                        
-                      }
-  
-  
-                    });
-  
-  
-                  })
-                  .catch(error => {
-                    console.error(error);
                   });
+                });
+                console.log("table4", table4);
+                var aEntityData = table4.map(function(sItem) {
+                  return {
+                    name: sItem,
+                  };
+                });
+                aEntityData.unshift("")
 
-
-
-
-      });
-     
-
-      console.log("a7latab",tab)
-      console.log("entitydata",aEntityData)
-      var aaEntityData = aTableData.map(function (sItem) {
-        return {
-          name: sItem,
- 
- 
-        };
-      });
-     
-
-
-
-
-      console.log("a9waadata",aaEntityData)
-
-
-      // Set the data to the model
-      oModela.setData({ Entity: aaEntityData });
-      console.log("modeeeeeeeeeeeeeeel",oModela)
-      oDialog.setModel(oModela, "rahmaModel");
-
-
-
+                // Set the data to the model
+                oModela.setData({ Entity: aEntityData });
+                console.log(oModela);
+                oDialog.setModel(oModela, "rahmaModel");
+              })
+              .catch(error => {
+                console.error("Error retrieving associations:", error);
+              });
+          })
+          .catch(error => {
+            console.error("Error retrieving entities:", error);
+          });
+      } else {
+        console.error("Model 'mainModel' is not defined or accessible in the view.");
+      }
     },
     onSelectChange: function (oEvent) {
       var oSelectedItem = oEvent.getParameter("selectedItem");

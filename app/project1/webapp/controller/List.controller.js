@@ -59,8 +59,7 @@ sap.ui.define([
 
                             new sap.ui.model.Filter(sField, sap.ui.model.FilterOperator.EQ, sValue)
 
-                        ]);
-
+                        ])
            
 
                         oListBinding.requestContexts().then(function(aContexts) {
@@ -209,26 +208,70 @@ sap.ui.define([
                 }
 
             },
+            onFetchAssociations: function() { 
+             
+                var oModel = this.getView().getModel("mainModel");
+                var sUrl = oModel.sServiceUrl + "/Association";
+                var sUrl1 = oModel.sServiceUrl + "/Entity";  // Assurez-vous que le nom de l'entité est correct
+                fetch(sUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        var Model = this.getOwnerComponent().getModel("associationModel");
+
+
+
+                        Model.setData(data);
+
+            
+                        // Vous pouvez également ici rafraîchir le binding du tableau si nécessaire
+
+
+                    })
+                    .catch(error => {
+                        console.error("Failed to fetch associations:", error);
+                    });
+                    fetch(sUrl1)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        var Model1 = this.getOwnerComponent().getModel("serviceModel");
+
+
+
+                        Model1.setData(data);
+
+            
+                        // Vous pouvez également ici rafraîchir le binding du tableau si nécessaire
+
+
+                    })
+                    .catch(error => {
+                        console.error("Failed to fetch associations:", error);
+                    });
+                   
+                   
+                    
+            },
+            
             onListItemPress: function (oEvent) {
                 var oItem = oEvent.getSource();
-                //var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 var oSelectedContext = oItem.getBindingContext("mainModel");
                 var selectedObj = oSelectedContext.getObject();
-                /// var oSelectedEntity = oSelectedContext.getProperty("name");
-                /// var oSelectedEntityid = oSelectedContext.getProperty("ID"); 
-                // Passer les données de l'entité sélectionnée à la deuxième vue et afficher cette vue
-                // var oDetailView = this.getView().getParent().getParent().getMidColumnPages()[0];
-                /*  oDetailView.setModel(new sap.ui.model.json.JSONModel(oSelectedEntity), "selectedEntityModel");
-                 this.getView().getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsMidExpanded); */
                 var oModel = this.getOwnerComponent().getModel("detailModel");
                 oModel.setData(selectedObj);
-                /// oModel.setProperty("/name", oSelectedEntity);
-                /// oModel.setProperty("/id", oSelectedEntityid);
+                this.onFetchAssociations() ; 
+                
 
-
-
-
-
+                
                 this.getOwnerComponent().getRouter().navTo("Details", {
                     index: selectedObj.ID
                 });

@@ -19,35 +19,32 @@
     "@cap-js/sqlite": "^1",
     "@sap/cds-dk": "^7",
     "@sap/ux-specification": "^1.120.8",
+    "chai": "^5.1.0",
+    "mocha": "^10.4.0",
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "start": "cds-serve",
-    "watch-app_generator": "cds watch --open app_generator/webapp/index.html?sap-ui-xx-viewCache=false",
+    "test": "mocha --recursive --experimental-modules --exit",
+    "start": "CDS_ENV=development cds-serve",
+    "watch-app_generator": "cds watch --open app_generator/webapp/index.html#/Listview",
     "undeploy": "cf undeploy App_Generator --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-project1": "cds watch --open project1/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-project2": "cds watch --open project2/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-project3": "cds watch --open project3/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-project4": "cds watch --open project4/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-projectrahma": "cds watch --open projectrahma/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-projecttest": "cds watch --open projecttest/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-project1": "cds watch --open project1/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {
       "auth": "mocked",
       "db": {
         "kind": "sqlite",
-        "credentials": { "url": "db.sqlite" },
-        "schema_evolution": "auto"
-     },
+        "credentials": {
+          "url": "db.sqlite"
+        }
+      },
       "[production]": {
         "db": "hana"
       }
     }
   },
-  "sapux": [
-  
-  ]
+  "sapux": []
 }
