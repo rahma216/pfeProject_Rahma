@@ -44,21 +44,20 @@ sap.ui.define([
       if (!this.base || !this.base.getEditFlow) {
         console.error("Base or getEditFlow is undefined.");
       }
+      this.initData()
     /*   this.getView().attachBrowserEvent("click", function(oEvent) {
         this.initData();
       }, this); */
       this.attachDragAndDrop();
-      this.initData()
-
-
-    },
-    onpress: function()
-    {
 
     },
 
     initData: function () {
-      var oModel = this.getOwnerComponent().getModel("mainModel"); 
+      var oModel = this.getOwnerComponent().getModel("mainModel");
+      var oModel1 = this.getOwnerComponent().getModel("detailModel");
+       console.log("aaaaaaaaaaaaaaaaaaaaaaa",oModel1.getData())
+
+
       var oJSONModel = new sap.ui.model.json.JSONModel();
 
       oJSONModel.setData({
@@ -75,6 +74,7 @@ sap.ui.define([
 
       if (oModel) {
         console.log("Main model found");
+
         // Fetch entity data
         fetch(sUrl1)
           .then(response => {
@@ -85,18 +85,18 @@ sap.ui.define([
           })
           .then(data => {
             // Create a JSON model containing the fetched data
-           // var oODataJSONModel = new sap.ui.model.json.JSONModel();
+            var oODataJSONModel = new sap.ui.model.json.JSONModel();
 
 
-           // oODataJSONModel.setData(data.value);
+            oODataJSONModel.setData(data.value);
 
-           // console.log("patron", oODataJSONModel);
-         // this.byId("list1").setModel(oODataJSONModel);
+            console.log("patron", oODataJSONModel);
+           this.byId("list1").setModel(oODataJSONModel);
 
 
             // Set the JSON model on the controls
             
-          //  console.log("aaaaaaaaaajsonnnnnnnn", oODataJSONModel.getData());
+            console.log("aaaaaaaaaajsonnnnnnnn", oODataJSONModel.getData());
 
           })
           .catch(error => {
@@ -144,53 +144,40 @@ sap.ui.define([
     },
 
     onDropIndicatorSize: function (oDraggedControl) {
-      // Access the specific model by its name
-      var oModel = this.getOwnerComponent().getModel();
-    
-      // Assuming the binding context path is correctly set for the dragged control,
-      // you can directly use it to get the data.
-      var sPath = oDraggedControl.getBindingContext().getPath();
-      var oData = oModel.getProperty(sPath);
-    
-      console.log("Binding Context Path:", sPath);
-      console.log("Data at Path:", oData);
-    
+      var oBindingContext = oDraggedControl.getBindingContext();
+      console.log("aaa", oBindingContext);
+      var oData = oBindingContext.getModel().getProperty(oBindingContext.getPath());
+      console.log("oData", oData);
+
       // Check if the dragged control is a StandardListItem
       if (oDraggedControl.isA("sap.m.StandardListItem")) {
         // Check if the oData object contains rows and columns properties
-        if (oData ) {
+        if (oData) {
           return {
             rows: 2,
             columns: 3
           };
         } else {
-          // Handle the case when rows and columns properties are not found in the data object
+          // Handle the case when rows and columns properties are not found
           console.error("Rows and/or columns properties not found in the data object.");
         }
       }
     },
-    
 
 
     onDrop: function (oInfo) {
       var oDragged = oInfo.getParameter("draggedControl");
       var oDropped = oInfo.getParameter("droppedControl");
       var sInsertPosition = oInfo.getParameter("dropPosition");
-      var Model1 = this.getOwnerComponent().getModel("serviceModel");
-
-
-
-
 
       var oDragContainer = oDragged.getParent();
       var oDropContainer = oInfo.getSource().getParent();
 
-      var oDragModel = oDragContainer.getModel("serviceModel");
+      var oDragModel = oDragContainer.getModel();
       var oDropModel = oDropContainer.getModel();
 
       var oDragModelData = oDragModel.getData();
       var oDropModelData = oDropModel.getData();
-
 
       var iDragPosition = oDragContainer.indexOfItem(oDragged);
       var iDropPosition = oDropContainer.indexOfItem(oDropped);
@@ -202,13 +189,13 @@ sap.ui.define([
       var oItem = oDragModelData[iDragPosition];
       oDragModelData.splice(iDragPosition, 1);
 
-        if (oDragModel === oDropModel && iDragPosition < iDropPosition) {
+      /*  if (oDragModel === oDropModel && iDragPosition < iDropPosition) {
            iDropPosition--;
        }
    
        if (sInsertPosition === "After") {
            iDropPosition++;
-       } 
+       } */
 
       // Ensure oDropModelData is an array
       if (!Array.isArray(oDropModelData)) {
@@ -225,13 +212,10 @@ sap.ui.define([
         oDropModel.setData(oDropModelData);
       }
 
-
       this.byId("grid1").focusItem(iDropPosition);
       var grid = this.getView().byId("grid1");
-
       this.logGridContent(grid);
-
-    }, 
+    },
     logGridContent: function (grid) {
       this.table = [];
       var items = grid.getItems();

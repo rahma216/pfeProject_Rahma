@@ -42,13 +42,7 @@ modules:
             - appproject1.zip
           name: appproject1
           target-path: resources/
-    
-     
-          
-       
-        
-       
-        
+
   - name: appgenerator
     type: html5
     path: app/app_generator
@@ -71,12 +65,7 @@ modules:
         - npm run build:cf
       supported-platforms:
         []
-  
-  
- 
- 
-  
-  
+
 resources:
   - name: App_Generator-auth
     type: org.cloudfoundry.managed-service

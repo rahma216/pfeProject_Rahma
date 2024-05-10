@@ -109,7 +109,7 @@ sap.ui.define([
                 var oView = this.getView(),
 
                     aInputs = [oView.byId("EntityID"), oView.byId("EntityNamee")];
-                    var oModel1 = this.getOwnerComponent().getModel("serviceModel");
+                    var oModel1 = this.getOwnerComponent().getModel("detailModel");
 
 
            
@@ -148,28 +148,19 @@ sap.ui.define([
                           return response.json();
                         })
                         .then(data => {
-                          // Suppose that data.value is the array containing the items you want to filter
-                          const filteredData = data.value.map(item => {
-                            return {
-                              id: item.ID,
-                              name: item.name
-                            };
-                          });
-                      
-                          // Create a JSON model containing the filtered data
-                          oModel1.setData(filteredData);
-                      
-                          console.log("Filtered data with only ids and names:", oModel1.getData());
-                      
+                          // Create a JSON model containing the fetched data
+              
+                          oModel1.setData(data.value);
+              
+                          console.log("patronnnnnnnnnnnnnnnnnnnnnnnnnnns", oModel1.getData());
+              
                           // Set the JSON model on the controls
-                          // Assuming you have a control that uses this model
-                          // this.getView().byId("myControl").setModel(oModel1);
+              
                         })
                         .catch(error => {
                           // Handle errors in fetching data
                           console.error('Error fetching data:', error);
                         });
-                      
                         
 
                         MessageToast.show("The input is validated. Your Entity has been Created.");
@@ -256,7 +247,7 @@ sap.ui.define([
 
 
 
-                        Model1.setData(data.value);
+                        Model1.setData(data);
 
             
                         // Vous pouvez également ici rafraîchir le binding du tableau si nécessaire
@@ -272,39 +263,6 @@ sap.ui.define([
             },
             
             onListItemPress: function (oEvent) {
-                var oModel1 = this.getOwnerComponent().getModel("serviceModel");
-                var sUrl1 = oModel1.sServiceUrl + "/Entity";  // Assurez-vous que le nom de l'entité est correct
-                fetch(sUrl1)
-                .then(response => {
-                  if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                  }
-                  return response.json();
-                })
-                .then(data => {
-                  // Suppose that data.value is the array containing the items you want to filter
-                  const filteredData = data.value.map(item => {
-                    return {
-                      id: item.ID,
-                      name: item.name
-                    };
-                  });
-              
-                  // Create a JSON model containing the filtered data
-                  oModel1.setData(filteredData);
-              
-                  console.log("Filtered data with only ids and names:", oModel1.getData());
-              
-                  // Set the JSON model on the controls
-                  // Assuming you have a control that uses this model
-                  // this.getView().byId("myControl").setModel(oModel1);
-                })
-                .catch(error => {
-                  // Handle errors in fetching data
-                  console.error('Error fetching data:', error);
-                });
-              
-
                 var oItem = oEvent.getSource();
                 var oSelectedContext = oItem.getBindingContext("mainModel");
                 var selectedObj = oSelectedContext.getObject();
